@@ -2,19 +2,19 @@ package Code;
 
 public class Orders {
 
-	private Dish dish;
+	private Product dish;
 	private Customer customer;
 	
 	
-	public Orders(Dish dish, Customer customer) {
+	public Orders(Product dish, Customer customer) {
 		this.dish = dish;
 		this.customer = customer;
 	}
 	
-	public Dish getDish() {
+	public Product getDish() {
 		return dish;
 	}
-	public void setDish(Dish dish) {
+	public void setDish(Product dish) {
 		this.dish = dish;
 	}
 	public Customer getCustomer() {

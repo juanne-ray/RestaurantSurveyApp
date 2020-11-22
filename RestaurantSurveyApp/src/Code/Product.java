@@ -1,8 +1,14 @@
 package Code;
 
-public class Dish {
+import java.io.Serializable;
+
+public class Product implements Serializable{
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2204778490603006570L;
 	private int dID;
 	private String Name;
 	private float Price;
@@ -11,7 +17,8 @@ public class Dish {
 	private int Calories;
 	private String Type;
 	
-	public Dish(String name, float price, String description, String cuisine, int calories, String type) {
+	public Product(int id, String name, float price, String description, String cuisine, int calories, String type) {
+		dID=id;
 		Name = name;
 		Price = price;
 		Description = description;
@@ -21,6 +28,14 @@ public class Dish {
 	}
 	
 	
+	public Product(int dID, String name, float price, String description) {
+		this.dID = dID;
+		Name = name;
+		Price = price;
+		Description = description;
+	}
+
+
 	public int getdID() {
 		return dID;
 	}

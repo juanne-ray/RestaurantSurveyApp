@@ -1,24 +1,37 @@
 package Code;
 
-public class Question {
+import java.io.Serializable;
+
+public class Question implements Serializable {
 	
-	private String qID;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 356129445695432677L;
+	
+	private int qID;
 	private String Question;
 	private String[] Options;
 	private String Answer;
 	
-	/*public Question(String qid, String question, String[] options, String answer) {
+	public Question(int qid, String question, String[] options) {
+		qID = qid; 
+		Question = question;
+		Options = options;   
+	}	
+	
+	public Question(int qid, String question, String[] options, String answer) {
 		qID = qid; 
 		Question = question;
 		Options = options;
 		Answer = answer;     
-	}*/
+	}
 
-	public String getQID() {
+	public int getQID() {
 		return qID;
 	}
 
-	public void setQID(String qid) {
+	public void setQID(int qid) {
 		qID = qid;
 	}
 

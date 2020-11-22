@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import Code.Customer;
+import Code.Product;
 import Code.Question;
+import GUI.MainUI;
 
 public class DBconnect {
 	
@@ -23,7 +27,9 @@ public class DBconnect {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(URL);
 			System.out.println("Connection Success");
+			
 		}
+		  
 		
 	 catch (ClassNotFoundException ex) {
 	        Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,12 +76,16 @@ public class DBconnect {
     		PreparedStatement psQues = conn.prepareStatement(QueryA);
             ResultSet rsQues = psQues.executeQuery();
             while(rsQues.next()){
-				// System.out.println(rs.getString("Question"));	///""+rs.getInt("QID")+"\t"+
-				Question q = new Question();
+				
+				/*Question q = new Question();
 				q.setQuestion(rsQues.getString("Question"));	
 				
 				String[] Options=fetchOptions(rsQues.getInt("QID"));				
-				q.setOptions(Options);
+				q.setOptions(Options);*/
+            	int QID=rsQues.getInt("QID");
+				String Question = rsQues.getString("Question");	
+				String[] Options=fetchOptions(QID);
+				Question q = new Question(QID,Question,Options);
 				quesArray.add(q);
             					 
 			  }                  
@@ -134,14 +144,11 @@ public class DBconnect {
         try {
             ps = conn.prepareStatement(s);
             rs = ps.executeQuery();
-            System.out.println(user+" "+pass);
             while (rs.next()){
                 if (rs.getString("Email").equals(user) && rs.getString("Password").equals(pass)){
-                
-                	
-                	
-                log = 0;
-                break;
+                	log = 0;
+                	Customer.setcID(rs.getInt("CID"));                 	
+                	break;
                 }
                 
             }
@@ -152,6 +159,51 @@ public class DBconnect {
         return log;
 
     }
+
+
+	public List<Product> getAllDishes(String query) {
+		List<Product> DishArray = new ArrayList<Product>();
+		try {
+		            
+		    		ps = conn.prepareStatement(query);
+		            rs = ps.executeQuery();
+		            while(rs.next()){
+					
+						String name=rs.getString("Dish_Name");
+						int id= rs.getInt("DID");
+						float price = rs.getFloat("Price");
+						//String Image=rs.getString("Image");
+						
+						Product d = new Product(id,name,price,"/Images/pizza.jpg");
+						DishArray.add(d);
+		            					 
+					  }                  
+		         
+		            return DishArray;
+		        
+		        }
+    	catch (Exception e) {
+            System.out.println(e);
+            return null;
+            }
+		
+	}
+
+
+	public int countQuestions(String queryA) {
+		try{
+			ps = conn.prepareStatement(queryA);
+			rs = ps.executeQuery();				
+			rs.next();		
+			int size = rs.getInt("count(*)");
+			return size;
+		}
+		catch(Exception e) {
+            System.out.println(e);
+            return 0;
+            }
+
+	}
 
     
 }
