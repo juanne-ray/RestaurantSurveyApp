@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.rmi.Naming;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import Code.LoginInterface;
 
@@ -20,7 +21,6 @@ import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
-import java.awt.Toolkit;
 public class LoginUI{
 
 	private LoginInterface LoginService;
@@ -34,6 +34,7 @@ public class LoginUI{
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					LoginUI window = new LoginUI();
@@ -60,7 +61,7 @@ public class LoginUI{
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
 		frame.setBackground(Color.WHITE);
 		frame.setBounds(250, 100, 850, 500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
@@ -80,6 +81,7 @@ public class LoginUI{
 		btnLogin.setFont(new Font("Arial", Font.PLAIN, 13));
 		btnLogin.setForeground(Color.WHITE);
 		btnLogin.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
@@ -97,7 +99,7 @@ public class LoginUI{
 					} else { 
 						mySessionCookie = result; 
 						System.out.println("Your login was successful.");
-						MainUI window = new MainUI();
+						QuestionnaireUI window = new QuestionnaireUI();
 						window.frame.setVisible(true);
 					}
 				} catch (Exception ex) {
@@ -138,6 +140,7 @@ public class LoginUI{
 		
 		JButton btnAdmin = new JButton("");
 		btnAdmin.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 			
 				//Admin Login

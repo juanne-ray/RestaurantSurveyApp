@@ -2,14 +2,12 @@ package DB;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Code.Customer;
 import Code.Product;
 import Code.Question;
-import GUI.MainUI;
 
 public class DBconnect {
 	

@@ -1,14 +1,4 @@
 package DB;
-import Code.Product;
-import Code.ProductInterface;
-
-import java.rmi.Naming;
-
-import java.util.List;
-
-import javax.swing.JOptionPane;
-
-import Code.Customer;
 
 public class CustomerDB {
 	

@@ -3,13 +3,11 @@ package Server;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -66,6 +64,7 @@ public class QuestionServices extends UnicastRemoteObject implements QuestionInt
 				int QID=rsQues.getInt("QID");
 				String Question = rsQues.getString("Question");	
 				String[] Options=fetchOptions(QID);
+				//int[][] answerscount=getAnswersCount(QID);
 				Question q = new Question(QID,Question,Options);
 				quesArray.add(q);
             					 
@@ -96,19 +95,12 @@ public class QuestionServices extends UnicastRemoteObject implements QuestionInt
     		String[] options=new String[size];
     		int i=0;
     		while(rsOpt.next()){
-    			
-    			
-    			
     			options[i]=rsOpt.getString("options");
     			i++;
-    			
-    			
     		 }
-        
     		psOpt.close();
     		rsOpt.close();
     		return options;
-    		
     	}
     	
     	catch(Exception ex) {
@@ -143,9 +135,20 @@ public class QuestionServices extends UnicastRemoteObject implements QuestionInt
 		{ 
 			System.out.println(Answers[0][col]);
 			System.out.println(Answers[1][col]);
+			int OpID=-1;
+			try {
+				ps = conn.prepareStatement("SELECT OpID FROM `preference_options` WHERE `options` LIKE '%"+Answers[1][col]+"%'");
+				rs = ps.executeQuery();				
+				rs.next();		
+				OpID = rs.getInt("OpID");
+			} catch (SQLException e) {
+				System.out.println(e);
+				e.printStackTrace();
+			}
 			
-			String Query="INSERT INTO preference_answers(CID, QID, Answer, Date) VALUES ("
-			    	+Customer.getcID()+",'"+Answers[0][col]+"','"+Answers[1][col]+"','"+java.time.LocalDate.now()+"')";
+			
+			String Query="INSERT INTO preference_answers(CID, QID, OpID, Date) VALUES ("
+			    	+Customer.getcID()+",'"+Answers[0][col]+"','"+OpID+"','"+java.time.LocalDate.now()+"')";
 			    		execute=ExecutionQuery(Query);
 		}
 
@@ -163,6 +166,101 @@ public class QuestionServices extends UnicastRemoteObject implements QuestionInt
 	        }
 	}
 
+	@Override
+	public boolean addNewQuestion(String Question) throws RemoteException {
+		String Query="INSERT INTO `preference_questions`(`Question`) VALUES ('"+Question+"')";
+		    		
+		return ExecutionQuery(Query);
+	}
+
+	@Override
+	public boolean addNewOption(String Option, int qid) throws RemoteException {
+		String Query= "INSERT INTO `preference_options`(`QID`, `options`) VALUES ("+qid+",'"+Option+"')";
+		return ExecutionQuery(Query);
+	}
+
+	@Override
+	public boolean deleteQuestion(int qid) throws RemoteException {
+		String Query1= "DELETE FROM `preference_questions` WHERE `QID` ="+qid;
+		boolean result1= ExecutionQuery(Query1);
+		String Query2= "DELETE FROM `preference_options` WHERE `QID`="+qid;
+		boolean result2= ExecutionQuery(Query2);
+		String Query3= "DELETE FROM `preference_answers` WHERE `QID`="+qid;
+		boolean result3=ExecutionQuery(Query3);
+		return (result1&&result2&&result3);
+	}
+
+	@Override
+	public boolean deleteOption(String Option, int qid) throws RemoteException {
+		String Query= "DELETE FROM `preference_options` WHERE `QID`="+qid+" AND options='"+Option+"'";
+		return ExecutionQuery(Query);
+	}
+
+	@Override
+	public boolean updateQuestion(String newQuestion, int qid) throws RemoteException {
+		String Query="UPDATE `preference_questions` SET `Question`='"+newQuestion+"' WHERE `QID`="+qid;
+		return ExecutionQuery(Query);
+	}
+
+	@Override
+	public boolean updateOption(String newOption, String oldOption, int qid) throws RemoteException {
+		String Query="UPDATE `preference_options` SET `options`='"+newOption+"' WHERE `QID`="+qid+" AND options= '"+oldOption+"'";
+		return ExecutionQuery(Query);
+	}
+
+	@Override
+	public int[][] getAnswersCount(int qid) throws RemoteException {
+		String QueryA="SELECT OpID,count(OpID) FROM preference_answers WHERE QID ="+qid+" GROUP BY OpID";
+		String QueryCount="SELECT count(OpID) FROM preference_answers WHERE QID ="+qid;
+		try {
+		ps=conn.prepareStatement(QueryCount);
+		rs=ps.executeQuery();
+		rs.next();
+		int size=rs.getInt("count(OpID)");
+		int i=0;
+		int[][] answers_count = new int[2][size];
+    	
+            
+    		PreparedStatement psA = conn.prepareStatement(QueryA);
+            ResultSet rsA = psA.executeQuery();
+            while(rsA.next()){
+				int OpID=rsA.getInt("OpID");
+				int Count= rsA.getInt("count(OpID)");	
+				answers_count[0][i]=OpID;
+				answers_count[1][i]=Count;				
+            	i++;			 
+			  }                  
+           
+            rsA.close();
+            psA.close();
+            return answers_count;
+        
+        }
+    	catch (Exception e) {
+            System.out.println(e+"Error");
+            e.printStackTrace();
+            return null;
+            }
+		
+	}
+
+	@Override
+	public String getOptionLabel(int OpID) throws RemoteException {
+		String Query="SELECT `options` FROM `preference_options` WHERE `OpID`="+OpID;
+		try{
+			ps = conn.prepareStatement(Query);
+			rs = ps.executeQuery();				
+			rs.next();		
+			String option = rs.getString("options");
+			return option;
+		}
+		catch(Exception e) {
+            System.out.println(e);
+            return null;
+            }
+	}
+
+	
 	
 
 }

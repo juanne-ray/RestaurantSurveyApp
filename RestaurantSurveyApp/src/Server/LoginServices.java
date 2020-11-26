@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 import Code.Customer;
 import Code.LoginInterface;
-import DB.CustomerDB;
 import DB.DBconnect;
 
 

@@ -13,6 +13,7 @@ public class Question implements Serializable {
 	private String Question;
 	private String[] Options;
 	private String Answer;
+	private int[][] AnswerCount;
 	
 	public Question(int qid, String question, String[] options) {
 		qID = qid; 
@@ -20,11 +21,11 @@ public class Question implements Serializable {
 		Options = options;   
 	}	
 	
-	public Question(int qid, String question, String[] options, String answer) {
+	public Question(int qid, String question, String[] options, int[][] answer_count) {
 		qID = qid; 
 		Question = question;
 		Options = options;
-		Answer = answer;     
+		AnswerCount = answer_count;     
 	}
 
 	public int getQID() {

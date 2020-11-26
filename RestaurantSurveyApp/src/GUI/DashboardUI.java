@@ -5,16 +5,11 @@ import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
+import javax.swing.WindowConstants;
+
 import java.awt.Color;
-import java.awt.SystemColor;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.JLabel;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,6 +27,7 @@ public class DashboardUI {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					DashboardUI window = new DashboardUI();
@@ -56,7 +52,7 @@ public class DashboardUI {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(250, 100, 850, 500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
@@ -79,6 +75,7 @@ public class DashboardUI {
 		//<img src="https://img.icons8.com/fluent/100/000000/question-mark.png"/>
 		JButton panelQuestion = new JButton();
 		panelQuestion.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 			
 				AddQuestionsUI ui = new AddQuestionsUI();
@@ -98,6 +95,7 @@ public class DashboardUI {
 		
 		JButton panel_Analysis = new JButton();
 		panel_Analysis.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				ChartsUI ui = new ChartsUI();

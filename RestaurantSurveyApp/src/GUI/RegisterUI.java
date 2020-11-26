@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.Naming;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,11 +15,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-
+import javax.swing.WindowConstants;
 import Code.Customer;
 import Code.CustomerInterface;
-import DB.CustomerDB;
 
 
 public class RegisterUI {
@@ -37,6 +34,7 @@ public class RegisterUI {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					RegisterUI window = new RegisterUI();
@@ -63,7 +61,7 @@ public class RegisterUI {
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
 		frame.setBackground(Color.WHITE);
 		frame.setBounds(250, 100, 850, 500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
@@ -89,6 +87,7 @@ public class RegisterUI {
 		btnRegister.setFont(new Font("Arial", Font.PLAIN, 13));
 		btnRegister.setForeground(Color.WHITE);
 		btnRegister.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				
@@ -138,7 +137,7 @@ public class RegisterUI {
 						    
 						    
 							if (result == 0) { 
-						    	new MainUI().frame.setVisible(true);
+						    	new QuestionnaireUI().frame.setVisible(true);
 						    	frame.dispose();
 						    }
 						

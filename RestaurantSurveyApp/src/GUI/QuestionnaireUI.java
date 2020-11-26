@@ -3,13 +3,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Component;
-
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -19,18 +15,17 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.WindowConstants;
 
-import Code.LoginInterface;
 import Code.Question;
 import Code.QuestionInterface;
-import DB.QuestionDB;
 import java.awt.Container;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 
-public class MainUI{
+public class QuestionnaireUI{
 
 	public JFrame frame;
 	int count = 0;	 
@@ -54,9 +49,10 @@ public class MainUI{
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
-					MainUI window = new MainUI();
+					QuestionnaireUI window = new QuestionnaireUI();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -68,7 +64,7 @@ public class MainUI{
 	/**
 	 * Create the application.
 	 */
-	public MainUI() {
+	public QuestionnaireUI() {
 		
 		try {
 			QuestionService = (QuestionInterface) Naming.lookup("rmi://localhost/Question");
@@ -82,6 +78,9 @@ public class MainUI{
 			e.printStackTrace();
 		} 
 		initialize();
+		
+		
+	
 	}
 
 	/**
@@ -94,7 +93,7 @@ public class MainUI{
 		contentPane.setBackground(Color.WHITE);
 		frame.setBackground(Color.WHITE);
 		frame.setBounds(250, 100, 850, 500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
@@ -114,6 +113,7 @@ public class MainUI{
 		
 		JButton btnPreferences = new JButton("Dietary Preferences");
 		btnPreferences.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				try
@@ -142,6 +142,7 @@ public class MainUI{
 		
 		JButton btnMenu = new JButton("All Menu");
 		btnMenu.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				//frame.remove(lblQuestion);
 				//frame.remove(Rdopanel);
@@ -166,6 +167,7 @@ public class MainUI{
 		btnFeedback.setForeground(Color.WHITE);
 		btnFeedback.setBackground(new Color(223, 141, 40));
 		btnFeedback.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				
@@ -175,7 +177,7 @@ public class MainUI{
 		panel.add(btnFeedback);
 		
 		JLabel lblLogoImage = new JLabel("");
-		lblLogoImage.setIcon(new ImageIcon(MainUI.class.getResource("/Images/EatZestSmall.png")));
+		lblLogoImage.setIcon(new ImageIcon(QuestionnaireUI.class.getResource("/Images/EatZestSmall.png")));
 		lblLogoImage.setBounds(10, 11, 280, 160);
 		panel.add(lblLogoImage);
 		
@@ -190,6 +192,7 @@ public class MainUI{
 		btnPrevious.setFont(new Font("Arial", Font.PLAIN, 13));
 		btnPrevious.setBackground(new Color(223, 141, 40));
 		btnPrevious.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (count!=1) {
 					try
@@ -223,6 +226,7 @@ public class MainUI{
 	
 		btnNext.addActionListener(new ActionListener() {
 			
+			@Override
 			public void actionPerformed(ActionEvent e) {				
 					
 					if(count!=QuestionCount) {
@@ -269,6 +273,7 @@ public class MainUI{
 		btnSubmit.setBackground(new Color(223, 141, 40));
 		btnSubmit.setBounds(0, 0, 100, 20);
 		btnSubmit.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				try {

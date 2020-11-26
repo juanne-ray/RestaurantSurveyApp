@@ -8,7 +8,6 @@ import java.awt.Image;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
 import java.rmi.Naming;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,23 +16,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
+import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 
 import Code.Product;
 import Code.ProductInterface;
-import DB.CustomerDB;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
-import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.LineBorder;
 
 public class OrderUI  {
 
@@ -55,6 +47,7 @@ public class OrderUI  {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					OrderUI window = new OrderUI();
@@ -83,7 +76,7 @@ public class OrderUI  {
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setBackground(Color.WHITE);
 		frame.setBounds(250, 100, 850, 500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		
@@ -97,8 +90,9 @@ public class OrderUI  {
 		
 		JButton btnPreferences = new JButton("Dietary Preferences");
 		btnPreferences.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainUI ui = new MainUI();
+				QuestionnaireUI ui = new QuestionnaireUI();
 				ui.frame.setVisible(true);
 			}
 		});
@@ -120,6 +114,7 @@ public class OrderUI  {
 		btnPastOrders.setForeground(Color.WHITE);
 		btnPastOrders.setBackground(new Color(223, 141, 40));
 		btnPastOrders.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
@@ -206,6 +201,7 @@ public class OrderUI  {
 						btnOrder[i].setBackground(new Color(223, 141, 40));
 						btnOrder[i].setForeground(Color.white);
 						btnOrder[i].addActionListener(new ActionListener() {
+							@Override
 							public void actionPerformed(ActionEvent e) {
 								JOptionPane.showConfirmDialog(frame, "Your cart has been updated","Order system",JOptionPane.DEFAULT_OPTION);
 								
@@ -228,8 +224,8 @@ public class OrderUI  {
 			}
 			
 			scrollPane.setBounds(297, 0, 537, 461);       
-			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		    scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		    scrollPane.setPreferredSize(new Dimension(200, 100));
 	        scrollPane.setViewportView(panelItems);
 	    
