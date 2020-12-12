@@ -71,15 +71,19 @@ public class LoginUI{
 		panel.setLayout(null);
 		
 		JLabel lblLogoImage = new JLabel("");
-		lblLogoImage.setBounds(-19, 71, 870, 341);
-		panel.add(lblLogoImage);		
-		ImageIcon img = new ImageIcon(LoginUI.class.getResource("/Images/EatZestSmall.png"));
-		lblLogoImage.setIcon(img);
+		lblLogoImage.setBounds(-50, 0, 1087,460);
+		panel.add(lblLogoImage);	
+		Image img = new ImageIcon(OrderUI.class.getResource("/Images/Logo.png")).getImage();
+		Image newimg = img.getScaledInstance(500, 500,  java.awt.Image.SCALE_SMOOTH);
+		ImageIcon newIcon = new ImageIcon(newimg);
+		
+		lblLogoImage.setIcon(newIcon);
 		
 		
 		JButton btnLogin = new JButton("Sign in");
+		btnLogin.setIcon(new ImageIcon(LoginUI.class.getResource("/Images/placeOrderIcon.png")));
 		btnLogin.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnLogin.setForeground(Color.WHITE);
+		btnLogin.setForeground(Color.BLACK);
 		btnLogin.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -111,8 +115,8 @@ public class LoginUI{
 				
 			}
 		});
-		btnLogin.setBackground(new Color(223, 141, 40));
-		btnLogin.setBounds(506, 333, 290, 31);
+		btnLogin.setBackground(Color.WHITE);
+		btnLogin.setBounds(506, 333, 290, 50);
 		frame.getContentPane().add(btnLogin);
 		
 		txtUsername = new JTextField();
@@ -143,7 +147,8 @@ public class LoginUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			
-				//Admin Login
+				AddQuestionsUI UI = new AddQuestionsUI();
+				UI.frame.setVisible(true);
 			}
 			
 		});

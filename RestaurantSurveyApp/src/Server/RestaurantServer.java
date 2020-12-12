@@ -27,6 +27,14 @@ public class RestaurantServer {
             reg.rebind("Question", questions);
             
             
+            OrderServices order= new OrderServices();
+            reg.rebind("Order",order);
+            
+            
+            RatingServices rate= new RatingServices();
+            reg.rebind("Rating",rate);
+           
+            
             System.out.println("Service started. Welcome to the RMI Login Service!");
             
 	        

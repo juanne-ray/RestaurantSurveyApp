@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import Code.Customer;
 import Code.CustomerInterface;
-import DB.DBconnect;
+
 
 public class CustomerServices extends UnicastRemoteObject implements CustomerInterface {
 
@@ -36,11 +36,11 @@ public class CustomerServices extends UnicastRemoteObject implements CustomerInt
 		  
 		
 		catch (ClassNotFoundException ex) {
-	        Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
+	        Logger.getLogger(CustomerServices.class.getName()).log(Level.SEVERE, null, ex);
 	
     	} 
 		catch (SQLException ex) {
-    		Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
+    		Logger.getLogger(CustomerServices.class.getName()).log(Level.SEVERE, null, ex);
     	}
 	}
 
@@ -58,7 +58,7 @@ public class CustomerServices extends UnicastRemoteObject implements CustomerInt
             int result = st.executeUpdate(Query);
             return (result > 0);
         } catch (SQLException ex) {
-            Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomerServices.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
     }

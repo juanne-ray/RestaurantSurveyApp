@@ -3,6 +3,7 @@ package GUI;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.Naming;
@@ -18,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import Code.Customer;
 import Code.CustomerInterface;
+import Code.LoginInterface;
 
 
 public class RegisterUI {
@@ -71,10 +73,13 @@ public class RegisterUI {
 		panel.setLayout(null);
 		
 		JLabel lblLogoImage = new JLabel("");
-		lblLogoImage.setBounds(-19, 71, 870, 341);
-		panel.add(lblLogoImage);		
-		ImageIcon img = new ImageIcon(LoginUI.class.getResource("/Images/EatZestSmall.png"));
-		lblLogoImage.setIcon(img);
+		lblLogoImage.setBounds(-50, 0, 1087,460);
+		panel.add(lblLogoImage);	
+		Image img = new ImageIcon(OrderUI.class.getResource("/Images/Logo.png")).getImage();
+		Image newimg = img.getScaledInstance(500, 500,  java.awt.Image.SCALE_SMOOTH);
+		ImageIcon newIcon = new ImageIcon(newimg);
+		
+		lblLogoImage.setIcon(newIcon);
 		
 		lblMessage = new JLabel("");
 		lblMessage.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -85,7 +90,10 @@ public class RegisterUI {
 		
 		JButton btnRegister = new JButton("Sign up");
 		btnRegister.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnRegister.setForeground(Color.WHITE);
+		btnRegister.setIcon(new ImageIcon(LoginUI.class.getResource("/Images/placeOrderIcon.png")));
+		btnRegister.setForeground(Color.BLACK);
+		btnRegister.setBackground(Color.white);
+		btnRegister.setBounds(506, 333, 290, 50);
 		btnRegister.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -152,8 +160,7 @@ public class RegisterUI {
 	           				
 			}
 		});
-		btnRegister.setBackground(new Color(223, 141, 40));
-		btnRegister.setBounds(506, 378, 290, 31);
+		
 		frame.getContentPane().add(btnRegister);
 		
 		txtUsername = new JTextField();

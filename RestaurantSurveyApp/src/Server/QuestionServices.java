@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import Code.Customer;
 import Code.Question;
 import Code.QuestionInterface;
-import DB.DBconnect;
+
 
 
 public class QuestionServices extends UnicastRemoteObject implements QuestionInterface {
@@ -29,7 +29,6 @@ public class QuestionServices extends UnicastRemoteObject implements QuestionInt
 	private Connection conn;
 	private ResultSet rs;
 	private PreparedStatement ps;
-	//private static DBconnect instance;
 	private final String URL = "jdbc:mysql://localhost:3306/eatzestdb?user=root&password=JSDT1958";
 	
     
@@ -45,10 +44,12 @@ public class QuestionServices extends UnicastRemoteObject implements QuestionInt
 		  
 		
 		catch (ClassNotFoundException ex) {
-	        Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
+	        Logger.getLogger(QuestionServices.class.getName()).log(Level.SEVERE, null, ex);
+			
 	
 	    } catch (SQLException ex) {
-	        Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
+	        Logger.getLogger(QuestionServices.class.getName()).log(Level.SEVERE, null, ex);
+	    	
 	    }
 	}
 
@@ -76,7 +77,7 @@ public class QuestionServices extends UnicastRemoteObject implements QuestionInt
         
         }
     	catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e+"here");
             return null;
             }
 	}
@@ -85,8 +86,8 @@ public class QuestionServices extends UnicastRemoteObject implements QuestionInt
 	public String[] fetchOptions(int qid) throws RemoteException {
     	try {
 
-    		PreparedStatement psOpt = conn.prepareStatement("select options from preference_options where QID="+qid);
-    		ResultSet rsOpt = psOpt.executeQuery();
+    		ps = conn.prepareStatement("select options from preference_options where QID="+qid);
+    		rs = ps.executeQuery();
     		Statement stmt = conn.createStatement();
     		ResultSet rsCount = stmt.executeQuery("select count(*) from preference_options where QID="+qid);
     		rsCount.next();
@@ -94,12 +95,12 @@ public class QuestionServices extends UnicastRemoteObject implements QuestionInt
     		int size = rsCount.getInt("count(*)");
     		String[] options=new String[size];
     		int i=0;
-    		while(rsOpt.next()){
-    			options[i]=rsOpt.getString("options");
+    		while(rs.next()){
+    			options[i]=rs.getString("options");
     			i++;
     		 }
-    		psOpt.close();
-    		rsOpt.close();
+    		ps.close();
+    		rs.close();
     		return options;
     	}
     	
@@ -161,7 +162,7 @@ public class QuestionServices extends UnicastRemoteObject implements QuestionInt
 	            int result = st.executeUpdate(query);
 	            return (result > 0);
 	        } catch (SQLException ex) {
-	            Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
+	            Logger.getLogger(QuestionServices.class.getName()).log(Level.SEVERE, null, ex);
 	            return false;
 	        }
 	}

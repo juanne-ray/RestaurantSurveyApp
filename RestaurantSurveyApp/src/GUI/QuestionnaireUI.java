@@ -24,6 +24,7 @@ import java.awt.Container;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import java.awt.FlowLayout;
 
 public class QuestionnaireUI{
 
@@ -42,6 +43,7 @@ public class QuestionnaireUI{
 	JPanel Rdopanel;
 	JButton btnSubmit;
 	JButton btnNext;
+	JPanel panel;
 	
 
 	/**
@@ -96,26 +98,33 @@ public class QuestionnaireUI{
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		contentPane.setLayout(null);
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		panel.setForeground(Color.WHITE);
 		panel.setBackground(SystemColor.menu);
 		panel.setBounds(0, 0, 299, 461);
 		contentPane.add(panel);
-		panel.setLayout(null);
 		
 		Rdopanel = new JPanel();
 		Rdopanel.setForeground(Color.WHITE);
 		Rdopanel.setBackground(Color.WHITE);
-		Rdopanel.setBounds(350, 150, 100,200);	
+		Rdopanel.setBounds(250, 150, 200,200);	
 
 		
 		
+		panel.setForeground(Color.WHITE);
+		panel.setBackground(SystemColor.menu);
+		panel.setBounds(0, 0, 60, 461);
+		//frame.getContentPane().add(panel);
+		panel.setLayout(null);
 		
-		JButton btnPreferences = new JButton("Dietary Preferences");
+		JButton btnPreferences = new JButton("");
+		btnPreferences.setLocation(0, 50);
+		btnPreferences.setSize(60, 60);
+		btnPreferences.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/addQuestionIcon.png")));
 		btnPreferences.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				try
 				{		
 						Rdopanel.setLayout(null);
@@ -131,16 +140,18 @@ public class QuestionnaireUI{
 					
 					System.out.print(ex);
 				}
-				
 			}
 		});
-		btnPreferences.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnPreferences.setForeground(Color.WHITE);
-		btnPreferences.setBackground(new Color(223, 141, 40));
-		btnPreferences.setBounds(50, 200, 209, 32);
+		
+		btnPreferences.setContentAreaFilled(false);
 		panel.add(btnPreferences);
 		
-		JButton btnMenu = new JButton("All Menu");
+		JButton btnMenu = new JButton("");
+		btnMenu.setSize(60, 60);
+		btnMenu.setLocation(0, 160);
+		btnMenu.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/cartIcon.png")));
+		btnMenu.setContentAreaFilled(false);
+		panel.add(btnMenu);
 		btnMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -156,41 +167,30 @@ public class QuestionnaireUI{
 				
 			}
 		});
-		btnMenu.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnMenu.setForeground(Color.WHITE);
-		btnMenu.setBackground(new Color(223, 141, 40));
-		btnMenu.setBounds(50, 250, 209, 32);
-		panel.add(btnMenu);
 		
-		JButton btnFeedback = new JButton("Feedback");
-		btnFeedback.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnFeedback.setForeground(Color.WHITE);
-		btnFeedback.setBackground(new Color(223, 141, 40));
+		JButton btnFeedback = new JButton("");
+		btnFeedback.setSize(60, 60);
+		btnFeedback.setLocation(0, 270);
 		btnFeedback.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				
+				FeedbackUI ui = new FeedbackUI();
+				ui.frame.setVisible(true);
 			}
 		});
-		btnFeedback.setBounds(50, 300, 209, 32);
+		btnFeedback.setIcon(new ImageIcon(QuestionnaireUI.class.getResource("/Images/iconFeedback.png")));
+		btnFeedback.setContentAreaFilled(false);
 		panel.add(btnFeedback);
-		
-		JLabel lblLogoImage = new JLabel("");
-		lblLogoImage.setIcon(new ImageIcon(QuestionnaireUI.class.getResource("/Images/EatZestSmall.png")));
-		lblLogoImage.setBounds(10, 11, 280, 160);
-		panel.add(lblLogoImage);
 		
 		lblQuestion = new JLabel();
 		lblQuestion.setFont(new Font("Arial", Font.PLAIN, 13));
-		lblQuestion.setBounds(347, 99, 287, 50);
+		lblQuestion.setBounds(250, 100, 400, 50);
 		contentPane.add(lblQuestion);
 		
 		
 		JButton btnPrevious = new JButton("Previous");
-		btnPrevious.setForeground(Color.WHITE);
+		btnPrevious.setForeground(Color.BLACK);
 		btnPrevious.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnPrevious.setBackground(new Color(223, 141, 40));
+		btnPrevious.setBackground(Color.WHITE);
 		btnPrevious.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -216,13 +216,13 @@ public class QuestionnaireUI{
 				}				
 			}
 		});
-		btnPrevious.setBounds(374, 404, 109, 26);
+		btnPrevious.setBounds(150, 404, 109, 26);
 		contentPane.add(btnPrevious);
 		
 		btnNext = new JButton("Next");
 		btnNext.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnNext.setForeground(Color.WHITE);
-		btnNext.setBackground(new Color(223, 141, 40));
+		btnNext.setForeground(Color.BLACK);
+		btnNext.setBackground(Color.WHITE);
 	
 		btnNext.addActionListener(new ActionListener() {
 			
@@ -232,18 +232,23 @@ public class QuestionnaireUI{
 					if(count!=QuestionCount) {
 						try
 						{
+							if(buttonGrid!=null)
+							{	
 								Answers[1][count-1]= OptionsActionPerformed();
-								System.out.println(count-1+"-"+Answers[1][count-1]);
+							
+							}
+								//System.out.println(count-1+"-"+Answers[1][count-1]);
 								Rdopanel.setLayout(null);
 								Rdopanel.removeAll();
 								frame.repaint();
 								setData(count);
+								
 								count=count+1;
 															
 						}
 						catch(IndexOutOfBoundsException ex) {
 							lblQuestion.setText("You have reached the end of Questions");		
-							Rdopanel.add(btnSubmit);
+							//Rdopanel.add(btnSubmit);
 							
 						}
 						catch(Exception ex){
@@ -263,15 +268,16 @@ public class QuestionnaireUI{
 									
 			}
 		});
-		btnNext.setBounds(669, 404, 109, 26);
+		btnNext.setBounds(650, 404, 109, 26);
 		contentPane.add(btnNext);	
 		
 		
 		btnSubmit = new JButton("Submit");
 		btnSubmit.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnSubmit.setForeground(Color.WHITE);
-		btnSubmit.setBackground(new Color(223, 141, 40));
-		btnSubmit.setBounds(0, 0, 100, 20);
+		btnSubmit.setForeground(Color.black);
+		btnSubmit.setBackground(Color.WHITE);
+		btnSubmit.setBounds(0, 0, 150, 50);
+		btnSubmit.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/placeOrderIcon.png")));
 		btnSubmit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -333,12 +339,11 @@ public class QuestionnaireUI{
 			}	
 		
 		} catch (Exception e) {
-			System.out.print(e.getMessage());
+			System.out.print(e);
 			e.printStackTrace();
 		}
 		
 	}
-	
 	
 	String getSelectedButton()
 	{  
@@ -356,10 +361,12 @@ public class QuestionnaireUI{
 		String s="";
 		try {
 
-          for(int i=0;i<buttonGrid.length;i++) {
-          
-             if(buttonGrid[i].isSelected()){
-            	 s =buttonGrid[i].getText();            	 
+			System.out.println("hi");
+          for(int x=0;x<buttonGrid.length;x++) {
+        	  
+             if(buttonGrid[x].isSelected()){
+            	 
+            	 s =buttonGrid[x].getText();            	 
             	 
              }
           
@@ -367,6 +374,7 @@ public class QuestionnaireUI{
 		}
 		catch(Exception ex) {
 			System.out.println(ex);
+			ex.printStackTrace();
 			s = null;
 			
 		}

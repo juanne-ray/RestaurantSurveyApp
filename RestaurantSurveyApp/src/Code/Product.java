@@ -16,23 +16,22 @@ public class Product implements Serializable{
 	private String Cuisine;
 	private int Calories;
 	private String Type;
+	private int Qty;
 	
-	public Product(int id, String name, float price, String description, String cuisine, int calories, String type) {
+	public Product(int id, String name, float price, int qty) {
 		dID=id;
 		Name = name;
 		Price = price;
-		Description = description;
-		Cuisine = cuisine;
-		Calories = calories;
-		Type = type;
+		Qty = qty;
 	}
 	
 	
-	public Product(int dID, String name, float price, String description) {
+	public Product(int dID, String name, float price, String description, String cuisine) {
 		this.dID = dID;
 		Name = name;
 		Price = price;
 		Description = description;
+		Cuisine = cuisine;
 	}
 
 
@@ -78,6 +77,16 @@ public class Product implements Serializable{
 	
 	public void setType(String type) {
 		Type = type;
+	}
+
+
+	public int getQty() {
+		return Qty;
+	}
+
+
+	public void setQty(int qty) {
+		Qty = qty;
 	}
 	
 

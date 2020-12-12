@@ -1,14 +1,22 @@
 package GUI;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,16 +24,26 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
+import Code.OrderInterface;
 import Code.Product;
 import Code.ProductInterface;
+
+
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 
 public class OrderUI  {
 
@@ -37,10 +55,14 @@ public class OrderUI  {
 	JButton[] btnOrder;
 	JScrollPane scrollPane;
 	JPanel panelItems;
+	ProductInterface ProductService;
+	OrderInterface OrderService;
+	List<Product> dishArray;
+	JList list = new JList();
+	DefaultListModel data;
+	JPanel panelCart;
+	List <Product> cartItems;
 
-	
-	
-	
 
 	/**
 	 * Launch the application.
@@ -63,8 +85,18 @@ public class OrderUI  {
 	 * Create the application.
 	 */
 	public OrderUI() {
+		
+		try {
+			ProductService = (ProductInterface) Naming.lookup("rmi://localhost:1099/Product");
+			OrderService = (OrderInterface) Naming.lookup("rmi://localhost:1099/Order");
+			ProductService.initializeCart("Sheena");
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
 		initialize();
 		setData();
+		
 	}
 
 	/**
@@ -84,11 +116,12 @@ public class OrderUI  {
 		JPanel panel = new JPanel();
 		panel.setForeground(Color.WHITE);
 		panel.setBackground(SystemColor.menu);
-		panel.setBounds(0, 0, 299, 461);
+		panel.setBounds(0, 0, 60, 461);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		JButton btnPreferences = new JButton("Dietary Preferences");
+		JButton btnPreferences = new JButton("");
+		btnPreferences.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/addQuestionIcon.png")));
 		btnPreferences.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -96,42 +129,57 @@ public class OrderUI  {
 				ui.frame.setVisible(true);
 			}
 		});
-		btnPreferences.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnPreferences.setForeground(Color.WHITE);
-		btnPreferences.setBackground(new Color(223, 141, 40));
-		btnPreferences.setBounds(50, 250, 209, 32);
+		btnPreferences.setContentAreaFilled(false);	
+		btnPreferences.setBounds(5, 100, 50, 50);
 		panel.add(btnPreferences);
 		
-		JButton btnMenu = new JButton("All Menu");
-		btnMenu.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnMenu.setForeground(Color.WHITE);
-		btnMenu.setBackground(new Color(223, 141, 40));
-		btnMenu.setBounds(50, 300, 209, 32);
+		JButton btnMenu = new JButton("");
+		btnMenu.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/cartIcon.png")));
+		btnMenu.setContentAreaFilled(false);	
+		btnMenu.setBounds(5, 175, 50, 50);
 		panel.add(btnMenu);
 		
-		JButton btnPastOrders = new JButton("Your Orders");
-		btnPastOrders.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnPastOrders.setForeground(Color.WHITE);
-		btnPastOrders.setBackground(new Color(223, 141, 40));
-		btnPastOrders.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnPastOrders.setBounds(50, 350, 209, 32);
-		panel.add(btnPastOrders);
-		
-		JLabel lblLogoImage = new JLabel("");
-		lblLogoImage.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/EatZestSmall.png")));
-		lblLogoImage.setBounds(10, 11, 280, 160);
-		panel.add(lblLogoImage);
-		
-		JButton btnFeedback = new JButton("Feedback");
-		btnFeedback.setForeground(Color.WHITE);
-		btnFeedback.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnFeedback.setBackground(new Color(223, 141, 40));
-		btnFeedback.setBounds(50, 400, 209, 32);
+		JButton btnFeedback = new JButton("");
+		btnFeedback.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/addQuestionIcon.png")));
+		btnFeedback.setContentAreaFilled(false);	
+		btnFeedback.setBounds(5, 250, 50, 50);
 		panel.add(btnFeedback);
+		
+		
+		
+		panelCart = new JPanel();
+		panelCart.setBackground(Color.white);
+		panelCart.setBounds(650, 10, 170, 440);
+		frame.getContentPane().add(panelCart);
+		list.setBounds(1, 1, 150, 360);
+		
+		
+		list.setBorder(null);
+		list.setVisibleRowCount(9);
+		
+		list.setFont(new Font("Arial", Font.PLAIN, 13));
+		list.setFixedCellHeight(40);
+		list.setFixedCellWidth(140);
+		list.setSelectionBackground(SystemColor.controlHighlight);
+		DefaultListCellRenderer renderer = (DefaultListCellRenderer) list.getCellRenderer();
+		//renderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+		
+		
+		UIManager.put("List.focusCellHighlightBorder", BorderFactory.createEmptyBorder());
+		 
+		data = cartData();		
+		panelCart.setLayout(null);
+		list.setModel(data);
+		 
+		panelCart.add(list);
+		JScrollPane scrollPane_1 = new JScrollPane(list);
+		scrollPane_1.setBounds(9, 5, 152, 362);
+		scrollPane_1.getVerticalScrollBar().setUI(new CustomScrollBarUI());
+		panelCart.add(scrollPane_1);
+		
+		
+		 
 
 	}
 	
@@ -141,8 +189,7 @@ public class OrderUI  {
     		//return db.getAllDishes(Query);
 	   
 			//CustomerDB db = new CustomerDB();
-			List<Product> dishArray = new ArrayList<Product>();
-			ProductInterface ProductService=(ProductInterface) Naming.lookup("rmi://localhost:1099/Product");
+			dishArray = new ArrayList<Product>();			
 			dishArray=ProductService.getAllDishes();
 			//dishArray=db.getOrderList();
     	
@@ -154,6 +201,7 @@ public class OrderUI  {
 			lblPrice= new JLabel[size];
 			lblFoodImage= new JLabel[size];
 			scrollPane=new JScrollPane();
+			scrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 			scrollPane.setViewportBorder(null);
 			
 			panelItems = new JPanel();
@@ -169,7 +217,7 @@ public class OrderUI  {
 			for(int i=0; i<size;i++) {
 					String n= dishArray.get(i).getName();
 	
-					lblDishName[i] = new JLabel("<html><p width='300'>"+n+"</p><html>");				
+					lblDishName[i] = new JLabel("<html><p width='250'>"+n+"</p><html>");				
 					Dpanel[i]=new JPanel();				
 					Dpanel[i].setBounds(0, b+=50, 450, 125);
 					Dpanel[i].setBackground(Color.WHITE);
@@ -196,13 +244,92 @@ public class OrderUI  {
 						lblFoodImage[i].setBounds(0, b+=11, 50, 50);
 						
 						
-						btnOrder[i] = new JButton("Buy");
+						btnOrder[i] = new JButton("Add to Cart");
 						btnOrder[i].setBounds(0,b+=30,20,40);					
-						btnOrder[i].setBackground(new Color(223, 141, 40));
-						btnOrder[i].setForeground(Color.white);
+						btnOrder[i].setBackground(Color.white);
+						btnOrder[i].setFont(new Font("Arial", Font.PLAIN, 13));
+						btnOrder[i].setForeground(Color.BLACK);
+						
 						btnOrder[i].addActionListener(new ActionListener() {
+							
 							@Override
 							public void actionPerformed(ActionEvent e) {
+								
+								    for (int j = 0; j <size; j++) 
+								     {
+								       if(e.getSource()==btnOrder[j]) //gameButtons[i][j] was clicked
+								       {
+								    	   try {
+								    		  
+								    		   
+								    		   
+								    		   
+								    		  
+								    		  int Quantity = dishArray.get(j).getQty();
+								    		  if(Quantity!=0) {
+								    			  dishArray.get(j).setQty(Quantity+1);  
+									    		  data.setElementAt(dishArray.get(j).getName()+" "+dishArray.get(j).getQty(),j);//list update --change j  
+												  list.setModel(data);
+												  Product p = dishArray.get(j);
+												  ProductService.updateCart(j,p);
+								    		  }
+								    		  else {
+								    			  dishArray.get(j).setQty(Quantity+1); 
+								    			  data.addElement(dishArray.get(j).getName()+" "+dishArray.get(j).getQty());//list update --change j  
+												  list.setModel(data);
+												  Product p = dishArray.get(j);
+												  ProductService.addToCart(p);
+								    		  }
+									   			/*if(dishArray.get(j).getQty()!=0) {
+										   			for(int i=0;i<cartItems.size();i++) {
+										   				//System.out.println(cartItems.get(i).getName());
+										   				if(dishArray.get(j).getdID()==cartItems.get(i).getdID()) {
+										   					
+										   					System.out.println(cartItems.get(i).getQty()); //working
+										   					Product p = cartItems.get(i);
+											   				p.setQty(cartItems.get(i).getQty()+1);
+											   				dishArray.get(j).setQty(dishArray.get(j).getQty()+1);
+										   					//ProductService.removeProduct(cartItems.get(i));
+											   				ProductService.updateCart(i,p);
+										   					
+										   					
+										   					//cartItems.get(i).setQty(cartItems.get(i).getQty()+1);
+										   					
+										   					System.out.println(p.getName()+" "+p.getQty());
+										   					data.setElementAt(p.getName()+" "+p.getQty(),i);//list update --change j  
+															list.setModel(data);
+															
+															
+															
+										   					
+										   				}
+										   				
+										   			}
+									   			}
+									   			else{
+									   				
+									   				Product p = dishArray.get(j);
+									   				p.setQty(1);
+									   				//System.out.println(p.getQty());
+									   				dishArray.get(j).setQty(dishArray.get(j).getQty()+1);  
+									   				ProductService.addToCart(p);	
+									   				
+									   				data.addElement(p.getName()+" "+p.getQty());
+													list.setModel(data);
+									   			}
+									   			*/
+												 
+												 
+												 
+													 
+												
+											} catch (RemoteException e1) {
+												System.out.println(e1);
+												e1.printStackTrace();
+											}
+								       }
+								     }
+								 
 								JOptionPane.showConfirmDialog(frame, "Your cart has been updated","Order system",JOptionPane.DEFAULT_OPTION);
 								
 							}
@@ -223,9 +350,15 @@ public class OrderUI  {
 					
 			}
 			
-			scrollPane.setBounds(297, 0, 537, 461);       
+			scrollPane.setBounds(100, 10, 537, 440);       
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		    scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		   /* scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+		        @Override
+		        protected void configureScrollBarColors() {
+		            this.thumbColor = Color.LIGHT_GRAY;		            
+		        }
+		    });*/
 		    scrollPane.setPreferredSize(new Dimension(200, 100));
 	        scrollPane.setViewportView(panelItems);
 	    
@@ -238,7 +371,67 @@ public class OrderUI  {
 					ex.printStackTrace();
 			
 			} 
+		JButton btnBuy = new JButton("Order");
+		btnBuy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(ProductService.getCartContents().size()>0) {
+						
+						List <Product> cartItems = ProductService.getCartContents();
+			   			for(int i=0;i<cartItems.size();i++) {
+			   				OrderService.placeOrder(cartItems.get(i));
+			   				System.out.println(cartItems.get(i).getName()+" "+cartItems.get(i).getQty());
+						}
+			   			JOptionPane.showConfirmDialog(frame, "Your Order has been placed, Please wait until waiter brings your Food","Order System",JOptionPane.DEFAULT_OPTION);
+						/*frame.remove(panelCart);
+						frame.remove(scrollPane);
+						frame.repaint();
+						JLabel lblwaiting = new JLabel("Waiting till your order is served!...");
+						lblwaiting.setBounds(200, 100, 400, 100);
+						lblwaiting.setFont(new Font("Arial", Font.PLAIN, 16));
+						frame.getContentPane().add(lblwaiting);*/
+						
+					}	
+					else {
+						
+						JOptionPane.showConfirmDialog(frame, "You have not selected any Item","Order System",JOptionPane.DEFAULT_OPTION);
+					}
+				} catch (Exception e1) {
+					System.out.println("e1");
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnBuy.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/placeOrderIcon.png")));
+		btnBuy.setFont(new Font("Arial", Font.PLAIN, 13));
+		btnBuy.setContentAreaFilled(false);	
+		btnBuy.setBounds(10, 380, 151, 50);
+		panelCart.add(btnBuy);
+
 
 		
 	}
+	
+	DefaultListModel cartData(){
+		
+
+		DefaultListModel data = new DefaultListModel();
+		List<Product> CartItems;
+		try {
+			
+			CartItems = ProductService.getCartContents();
+			for(int i=0;i<CartItems.size();i++) {
+				//System.out.println(CartItems.get(i));
+				data.addElement(CartItems.get(i).getName()+" "+CartItems.get(i).getQty());
+			}
+		} catch (RemoteException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
+		return data;
+		
+		
+	}
+	
+	
 }

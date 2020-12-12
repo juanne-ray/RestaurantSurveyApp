@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 import Code.Customer;
 import Code.LoginInterface;
-import DB.DBconnect;
+
 
 
 public class LoginServices extends UnicastRemoteObject implements LoginInterface{
@@ -24,7 +24,6 @@ public class LoginServices extends UnicastRemoteObject implements LoginInterface
 	private Statement st;
 	private ResultSet rs;
 	private PreparedStatement ps;
-	private static DBconnect instance;
 	private final String URL = "jdbc:mysql://localhost:3306/eatzestdb?user=root&password=JSDT1958";
 	
 	
@@ -39,10 +38,10 @@ public class LoginServices extends UnicastRemoteObject implements LoginInterface
 		  
 		
 	 catch (ClassNotFoundException ex) {
-	        Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
+	        Logger.getLogger(LoginServices.class.getName()).log(Level.SEVERE, null, ex);
 	
 	    } catch (SQLException ex) {
-	        Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
+	        Logger.getLogger(LoginServices.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
 	

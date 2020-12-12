@@ -18,7 +18,7 @@ import java.awt.event.ActionEvent;
 
 public class DashboardUI {
 
-	private JFrame frame;
+	JFrame frame;
 	
 	ImageIcon newIcon;
 
@@ -62,6 +62,11 @@ public class DashboardUI {
 		panel.setLayout(null);
 		
 		JButton panelOrders = new JButton();
+		panelOrders.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		panelOrders.setIcon(new ImageIcon(DashboardUI.class.getResource("/Images/iconOrders.png")));
 		//panelOrders.setBorder(new MatteBorder(1, 1, 1, 1, (Color) SystemColor.controlHighlight));
 		panelOrders.setBackground(Color.WHITE);
 		panelOrders.setBounds(100, 100, 150, 100);
@@ -108,44 +113,6 @@ public class DashboardUI {
 		panel_Analysis.setLayout(null);
 		
 		
-		try {
-			//https://quickchart.io/chart?bkg=white&c={ type: 'pie', data: { datasets: [ { data: [84, 28, 57, 19, 97], backgroundColor: [ 'rgb(255, 99, 132)', 'rgb(255, 159, 64)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)', 'rgb(54, 162, 235)', ], label: 'Dataset 1', }, ], labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'], },}
-			/*URL graphurl = new URL("https://quickchart.io/chart?bkg=white&c={type:'doughnut',data:{datasets:[{data:[84,28,57,19,97],backgroundColor:['rgb(255,99,132)','rgb(255,159,64)','rgb(255,205,86)','rgb(75,192,192)','rgb(54,162,235)',],label:'Dataset 1',},],labels:['Red','Orange','Yellow','Green','Blue'],},}");
-			//https://quickchart.io/chart?bkg=white&c={type:'doughnut',data:{datasets:[{data:[84,28,57,19,97],},],},}
-			img = ImageIO.read(graphurl);
-			ImageIcon newIcon = new ImageIcon(img);
-			lblGraphImage.setIcon(newIcon);*/
-			
-			URL chartimg = new URL("https://img.icons8.com/color/150/000000/doughnut-chart--v1.png");
-			Image img = ImageIO.read(chartimg);//.getScaledInstance(150, 150,  java.awt.Image.SCALE_SMOOTH);
-			
-			newIcon = new ImageIcon(img);
-			panel_Analysis.setIcon(newIcon);
-			
-			
-			URL quesimg = new URL("https://img.icons8.com/cute-clipart/64/000000/help.png"); //https://img.icons8.com/fluent/100/000000/question-mark.png
-			Image img1 = ImageIO.read(quesimg);			
-			panelQuestion.setIcon(new ImageIcon(img1));
-			
-			URL foodimg = new URL("https://img.icons8.com/color/64/000000/tableware.png");
-			Image img2=ImageIO.read(foodimg);
-			panelDish.setIcon(new ImageIcon(img2));
-			
-			
-			URL empimg = new URL("https://img.icons8.com/cute-clipart/64/000000/user-shield.png"); //https://img.icons8.com/color/64/000000/google-groups.png
-			Image img3=ImageIO.read(empimg);
-			panelEmployee.setIcon(new ImageIcon(img3));
-			
-			
-			URL ordimg = new URL("https://img.icons8.com/color/64/000000/activity-history.png");
-			Image img4=ImageIO.read(ordimg);
-			panelOrders.setIcon(new ImageIcon(img4));
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
-			e.printStackTrace();
-		}
 		
 		
 		

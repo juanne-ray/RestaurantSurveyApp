@@ -52,6 +52,7 @@ public class AddQuestionsUI {
 	private JButton btnDeleteOption;
 	private JButton btnUpdateOption;
 	private JButton btnUpdateQuestion;
+	private JButton btnChart;
 
 	/**
 	 * Launch the application.
@@ -120,9 +121,62 @@ public class AddQuestionsUI {
 		 list.setModel(data);
 		 
 		 JPanel controlPanel = new JPanel();
-		 controlPanel.setPreferredSize(new Dimension(40,363));
-		 controlPanel.setBackground(Color.darkGray);
+		 controlPanel.setPreferredSize(new Dimension(60, 363));
+		 controlPanel.setBackground(Color.WHITE);
 		 panel.add(controlPanel);
+		 
+		 btnChart = new JButton("");
+		 btnChart.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		ChartsUI ui = new ChartsUI();
+		 		ui.frame.setVisible(true);
+		 	}
+		 });
+		 controlPanel.setLayout(null);
+		 btnChart.setBounds(0, 0, 60, 60);
+		 btnChart.setContentAreaFilled(false);
+		 btnChart.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/chartIcon.png")));
+		 btnChart.setBackground(Color.WHITE);
+		 controlPanel.add(btnChart);
+		 
+		 JButton btnOrders = new JButton("");
+		 btnOrders.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		ManageOrderUI mui = new ManageOrderUI();
+		 		mui.frame.setVisible(true);
+		 	}		 		
+		 });
+		 btnOrders.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/iconOrders.png")));
+		 btnOrders.setContentAreaFilled(false);
+		 btnOrders.setBackground(Color.WHITE);
+		 btnOrders.setBounds(0, 90, 60, 60);
+		 controlPanel.add(btnOrders);
+		 
+		 JButton btnProducts = new JButton("");
+		 btnProducts.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		
+		 		AddProductsUI aui = new AddProductsUI();
+		 		aui.frame.setVisible(true);
+		 	}
+		 });
+		 btnProducts.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/iconProduct.png")));
+		 btnProducts.setContentAreaFilled(false);
+		 btnProducts.setBackground(Color.WHITE);
+		 btnProducts.setBounds(0, 180, 60, 60);
+		 controlPanel.add(btnProducts);
+		 
+		 JButton btnQuestion = new JButton("");
+		 btnQuestion.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		
+		 	}
+		 });
+		 btnQuestion.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/addQuestionIcon.png")));
+		 btnQuestion.setContentAreaFilled(false);
+		 btnQuestion.setBackground(Color.WHITE);
+		 btnQuestion.setBounds(0, 270, 60, 60);
+		 controlPanel.add(btnQuestion);
 		  
 		  
 		 
