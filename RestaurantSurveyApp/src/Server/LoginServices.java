@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Code.Customer;
+import Code.Employee;
 import Code.LoginInterface;
 
 
@@ -50,13 +51,13 @@ public class LoginServices extends UnicastRemoteObject implements LoginInterface
 		
         //CustomerDB odb=new CustomerDB();//Making Object of the class OrderDB
         
-        int log = 1;
+        
         try {
             ps = conn.prepareStatement("select * from customer");
             rs = ps.executeQuery();
             while (rs.next()){
                 if (rs.getString("Email").equals(username) && rs.getString("Password").equals(password)){
-                	log = 0;
+                	
                 	Customer.setcID(rs.getInt("CID"));                 	
                 	sessionCookie = "xyz"+Math.random(); 
         			return sessionCookie; 
@@ -75,6 +76,35 @@ public class LoginServices extends UnicastRemoteObject implements LoginInterface
 
 	@Override
 	public String logout(String cookie) throws RemoteException {
+		sessionCookie = "abc"+Math.random(); 
+		return "logout successful";
+	}
+
+	@Override
+	public String AdminLogin(String username, String password) throws RemoteException {
+		try {
+            ps = conn.prepareStatement("select * from employee");
+            rs = ps.executeQuery();
+            while (rs.next()){
+                if (rs.getString("Email").equals(username) && rs.getString("Password").equals(password)){
+                	
+                	Employee.seteID(rs.getInt("EID"));                 	
+                	sessionCookie = "xyz"+Math.random(); 
+        			return sessionCookie; 
+                }
+                
+            }
+            return "incorrect";
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+		
+	}
+
+	@Override
+	public String Adminlogout(String cookie) throws RemoteException {
 		sessionCookie = "abc"+Math.random(); 
 		return "logout successful";
 	}

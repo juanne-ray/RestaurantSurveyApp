@@ -111,7 +111,7 @@ public class MainUI {
 		JLabel lblQuote = new JLabel("<html><p width='190' align='center'>"+getMotivationAPI()+"</p></html>");
 		
 		
-			//Image img = ImageIO.read(MainUI.class.getResource("/Images/quoteIcon.png")).getScaledInstance(100, 100,  java.awt.Image.SCALE_DEFAULT);
+			//Image img = ImageIO.read(MainUI.class.getResource("/UI_Images/quoteIcon.png")).getScaledInstance(100, 100,  java.awt.Image.SCALE_DEFAULT);
 		lblQuote.setIcon(null);
 		
 		
@@ -121,7 +121,7 @@ public class MainUI {
 		panelQuote.add(lblQuote);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(MainUI.class.getResource("/Images/quoteIcon.png")));
+		lblNewLabel.setIcon(new ImageIcon(MainUI.class.getResource("/UI_Images/quoteIcon.png")));
 		lblNewLabel.setBounds(25, 25, 100, 100);
 		panelQuote.add(lblNewLabel);
 		

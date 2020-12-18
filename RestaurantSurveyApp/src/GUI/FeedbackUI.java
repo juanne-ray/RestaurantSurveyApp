@@ -15,6 +15,7 @@ import Code.Product;
 import Code.QuestionInterface;
 import Code.Rating;
 import Code.RatingInterface;
+import Code.SessionCookie;
 
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -35,6 +36,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.awt.SystemColor;
 
 public class FeedbackUI {
 
@@ -51,6 +53,7 @@ public class FeedbackUI {
 	int answerNo;
 	JPanel panelRating;
 	JButton btnSubmit;
+	JPanel MainPanel;
 	
 	/**
 	 * Launch the application.
@@ -91,65 +94,37 @@ public class FeedbackUI {
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
-		frame.setBounds(250, 100,850,550);
+		frame.setBounds(250, 100,850,500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.WHITE);
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setLayout(null);
-		/*listener = new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	        	
-	            if (e.getSource() instanceof JButton) {
-	            	if(rating==0) {
-		            	for(int i=0;i<5;i++) {            		
-		            		//((JButton) e.getSource()).setForeground(new Color(247, 220, 111));
-		            		if(btnStar[i]==e.getSource()) {
-	        					for(int j=0;j<=i;j++) {
-	            					btnStar[j].setForeground(new Color(247, 220, 111));
-	            					
-	        					}
-	        					rating = i;
-	        					rateStored[rateNo]=i+1;
-	        					
-	        					
-		            		}
-		            		
-		            	}
-	            	}else {
-	            		
-	            		for(int i=0;i<5;i++) {            		
-		            		
-		            		if(btnStar[i]==e.getSource()) {
-	        					for(int j=0;j<5;j++) {
-	        						btnStar[j].setForeground(Color.black); //recolor same color
-	            					
-	        					}
-	        					for(int j=0;j<=i;j++) {
-	            					btnStar[j].setForeground(new Color(247, 220, 111));
-	            					
-	        					}
-	        					rateStored[rateNo]=i+1;
-		            		}
-		            	}
-	            	}
-	            	
-	            }
-	        }
-	    };*/
+		MainPanel = new JPanel();
+		MainPanel.setBackground(Color.WHITE);
+		frame.getContentPane().add(MainPanel, BorderLayout.CENTER);
+		MainPanel.setLayout(null);
+		
+		JLabel lblTitle = new JLabel("Feedback Form");
+		lblTitle.setFont(new Font("Arial Black", Font.BOLD, 13));
+		lblTitle.setBounds(375, 10, 120, 25);
+		MainPanel.add(lblTitle);
+		
+		JButton btnProceed = new JButton("Start");		
+		btnProceed.setFont(new Font("Arial", Font.PLAIN, 13));
+		btnProceed.setBackground(Color.WHITE);
+		btnProceed.setBounds(375, 400, 109, 26);
+		MainPanel.add(btnProceed);
 		JLabel lblDescription = new JLabel();
 		lblDescription.setFont(new Font("Arial", Font.PLAIN, 13));
-		lblDescription.setBounds(250, 100, 400, 50);
+		lblDescription.setBounds(250, 100, 550, 50);
 		//System.out.println(rateNo+""+rateArray.get(rateNo).getRating());
 		//lblDescription.setText(rateArray.get(0).getDescription());		
 		//rateNo++;
-		panel.add(lblDescription);
+		MainPanel.add(lblDescription);
 		
 		btnSubmit = new JButton("Submit");		
 		btnSubmit.setBackground(Color.WHITE);
 		btnSubmit.setFont(new Font("Arial", Font.PLAIN, 13));
+		btnSubmit.setBounds(0, 0, 150, 50);
+		btnSubmit.setIcon(new ImageIcon(OrderUI.class.getResource("/UI_Images/placeOrderIcon.png")));
 		
 		JButton btnPrevious = new JButton("Previous");
 		btnPrevious.addActionListener(new ActionListener() {
@@ -182,7 +157,7 @@ public class FeedbackUI {
 		btnPrevious.setFont(new Font("Arial", Font.PLAIN, 13));
 		btnPrevious.setBackground(Color.WHITE);
 		btnPrevious.setBounds(150, 404, 109, 26);
-		panel.add(btnPrevious);
+		
 		
 		JButton btnNext = new JButton("Next");
 		btnNext.addActionListener(new ActionListener() {
@@ -228,14 +203,110 @@ public class FeedbackUI {
 		btnNext.setFont(new Font("Arial", Font.PLAIN, 13));
 		btnNext.setBackground(Color.WHITE);
 		btnNext.setBounds(650, 404, 109, 26);
-		panel.add(btnNext);
+		
 		
 		panelRating = new JPanel();
 		panelRating.setBackground(Color.WHITE);
 		panelRating.setBounds(250, 150, 200,200);	
-		panel.add(panelRating);
 		
 		
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setForeground(Color.WHITE);
+		panel.setBackground(SystemColor.menu);
+		panel.setBounds(0, 0, 60, 461);
+		MainPanel.add(panel);
+		
+		JButton btnPreferences = new JButton("");
+		btnPreferences.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				QuestionnaireUI ui = new QuestionnaireUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnPreferences.setIcon(new ImageIcon(FeedbackUI.class.getResource("/UI_Images/addQuestionIcon.png")));
+		btnPreferences.setContentAreaFilled(false);
+		btnPreferences.setBounds(5, 100, 50, 50);
+		panel.add(btnPreferences);
+		
+		JButton btnMenu = new JButton("");
+		btnMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				OrderUI ui= new OrderUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnMenu.setIcon(new ImageIcon(FeedbackUI.class.getResource("/UI_Images/cartIcon.png")));
+		btnMenu.setContentAreaFilled(false);
+		btnMenu.setBounds(5, 175, 50, 50);
+		panel.add(btnMenu);
+		
+		JButton btnFeedback = new JButton("");
+		btnFeedback.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnFeedback.setIcon(new ImageIcon(FeedbackUI.class.getResource("/UI_Images/iconFeedback.png")));
+		btnFeedback.setContentAreaFilled(false);
+		btnFeedback.setBounds(5, 250, 50, 50);
+		panel.add(btnFeedback);
+		
+		
+		JButton btnLogOut = new JButton("");
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SessionCookie.setCookie(null);
+				LoginUI ui = new LoginUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnLogOut.setIcon(new ImageIcon(QuestionnaireUI.class.getResource("/UI_Images/iconLogOut.png")));
+		btnLogOut.setContentAreaFilled(false);
+		btnLogOut.setBackground(Color.WHITE);
+		btnLogOut.setBounds(5, 325, 50, 50);
+		panel.add(btnLogOut);
+		
+		
+		JLabel lblBgRating = new JLabel("");
+		lblBgRating.setIcon(new ImageIcon(FeedbackUI.class.getResource("/UI_Images/ratingImg.jpg")));
+		lblBgRating.setBounds(125, 11, 630, 439);
+		MainPanel.add(lblBgRating);
+		
+		btnProceed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainPanel.add(btnPrevious);
+				MainPanel.add(btnNext);
+				MainPanel.add(panelRating);
+				
+				MainPanel.remove(lblBgRating);
+				MainPanel.remove(btnProceed);
+				
+				MainPanel.repaint();
+				
+				lblDescription.setText(rateArray.get(rateNo).getDescription());
+				
+				panelRating.removeAll();
+				frame.repaint();
+				displayStarButtons();
+				if(rateStored[rateNo]>0) {
+					for(int y=0;y<btnStar.length;y++) {
+        				btnStar[y].setForeground(Color.black);			            				
+    				}
+					
+					for(int y=0;y<=rateStored[rateNo-1];y++) {
+        				btnStar[y].setForeground(new Color(247, 220, 111));			            				
+    				}
+					//System.out.print(rateStored[rateNo-1]);
+					
+				}
+				rateNo++;
+				
+			}
+		});
 		
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -244,6 +315,9 @@ public class FeedbackUI {
 				Rating r = rateArray.get(i);
 				try {
 					RatingService.sendRating(r);
+					lblDescription.setText("Questionnaire Submitted successfully");
+					lblDescription.setForeground(new Color(30, 130, 76));
+					
 				} catch (RemoteException e1) {
 					System.out.println(e1);
 					e1.printStackTrace();

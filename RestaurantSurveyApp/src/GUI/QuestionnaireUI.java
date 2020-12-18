@@ -19,6 +19,8 @@ import javax.swing.WindowConstants;
 
 import Code.Question;
 import Code.QuestionInterface;
+import Code.SessionCookie;
+
 import java.awt.Container;
 
 import javax.swing.AbstractButton;
@@ -44,6 +46,9 @@ public class QuestionnaireUI{
 	JButton btnSubmit;
 	JButton btnNext;
 	JPanel panel;
+	JPanel MainPanel ;
+	private JLabel lblBg;
+	private JButton btnLogOut;
 	
 
 	/**
@@ -98,11 +103,24 @@ public class QuestionnaireUI{
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		contentPane.setLayout(null);
 		
+		MainPanel = new JPanel();
+		MainPanel.setBackground(Color.WHITE);
+		MainPanel.setBounds(0, 0, 834, 461);
+		MainPanel.setLayout(null);
+		contentPane.add(MainPanel);
+		
+		JButton btnStart = new JButton("Start");
+		btnStart.setForeground(Color.BLACK);
+		btnStart.setFont(new Font("Arial", Font.PLAIN, 13));
+		btnStart.setBackground(Color.WHITE);
+		btnStart.setBounds(375, 406, 110, 26);
+		MainPanel.add(btnStart);
+		
 		panel = new JPanel();
 		panel.setForeground(Color.WHITE);
 		panel.setBackground(SystemColor.menu);
 		panel.setBounds(0, 0, 299, 461);
-		contentPane.add(panel);
+		MainPanel.add(panel);
 		
 		Rdopanel = new JPanel();
 		Rdopanel.setForeground(Color.WHITE);
@@ -118,38 +136,25 @@ public class QuestionnaireUI{
 		panel.setLayout(null);
 		
 		JButton btnPreferences = new JButton("");
-		btnPreferences.setLocation(0, 50);
-		btnPreferences.setSize(60, 60);
-		btnPreferences.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/addQuestionIcon.png")));
+		btnPreferences.setLocation(5, 100);
+		btnPreferences.setSize(50, 50);
+		btnPreferences.setIcon(new ImageIcon(OrderUI.class.getResource("/UI_Images/addQuestionIcon.png")));
 		btnPreferences.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				try
-				{		
-						Rdopanel.setLayout(null);
-						Rdopanel.removeAll();
-						frame.repaint();
-						setData(count);
-						count=count+1;
-				}
-				catch(IndexOutOfBoundsException ex) {
-					lblQuestion.setText("You have reached the end of Questions");
-				}
-				catch(Exception ex){
-					
-					System.out.print(ex);
-				}
+				
 			}
 		});
 		
 		btnPreferences.setContentAreaFilled(false);
 		panel.add(btnPreferences);
 		
+		
 		JButton btnMenu = new JButton("");
-		btnMenu.setSize(60, 60);
-		btnMenu.setLocation(0, 160);
-		btnMenu.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/cartIcon.png")));
+		btnMenu.setSize(50, 50);
+		btnMenu.setLocation(5, 175);
+		btnMenu.setIcon(new ImageIcon(OrderUI.class.getResource("/UI_Images/cartIcon.png")));
 		btnMenu.setContentAreaFilled(false);
 		panel.add(btnMenu);
 		btnMenu.addActionListener(new ActionListener() {
@@ -169,22 +174,38 @@ public class QuestionnaireUI{
 		});
 		
 		JButton btnFeedback = new JButton("");
-		btnFeedback.setSize(60, 60);
-		btnFeedback.setLocation(0, 270);
+		btnFeedback.setSize(50, 50);
+		btnFeedback.setLocation(5, 250);
 		btnFeedback.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FeedbackUI ui = new FeedbackUI();
+				FeedbackUI ui = new FeedbackUI();				
 				ui.frame.setVisible(true);
+				frame.dispose();
 			}
 		});
-		btnFeedback.setIcon(new ImageIcon(QuestionnaireUI.class.getResource("/Images/iconFeedback.png")));
+		btnFeedback.setIcon(new ImageIcon(QuestionnaireUI.class.getResource("/UI_Images/iconFeedback.png")));
 		btnFeedback.setContentAreaFilled(false);
 		panel.add(btnFeedback);
+		
+		btnLogOut = new JButton("");
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SessionCookie.setCookie(null);
+				LoginUI ui = new LoginUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnLogOut.setIcon(new ImageIcon(QuestionnaireUI.class.getResource("/UI_Images/iconLogOut.png")));
+		btnLogOut.setContentAreaFilled(false);
+		btnLogOut.setBackground(Color.WHITE);
+		btnLogOut.setBounds(5, 325, 50, 50);
+		panel.add(btnLogOut);
 		
 		lblQuestion = new JLabel();
 		lblQuestion.setFont(new Font("Arial", Font.PLAIN, 13));
 		lblQuestion.setBounds(250, 100, 400, 50);
-		contentPane.add(lblQuestion);
+		MainPanel.add(lblQuestion);
 		
 		
 		JButton btnPrevious = new JButton("Previous");
@@ -217,7 +238,7 @@ public class QuestionnaireUI{
 			}
 		});
 		btnPrevious.setBounds(150, 404, 109, 26);
-		contentPane.add(btnPrevious);
+		
 		
 		btnNext = new JButton("Next");
 		btnNext.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -269,7 +290,49 @@ public class QuestionnaireUI{
 			}
 		});
 		btnNext.setBounds(650, 404, 109, 26);
-		contentPane.add(btnNext);	
+		
+		
+		lblBg = new JLabel("");
+		lblBg.setIcon(new ImageIcon(QuestionnaireUI.class.getResource("/UI_Images/QuesImg.jpg")));
+		lblBg.setBounds(175, 10, 550, 440);
+		MainPanel.add(lblBg);
+		
+		JLabel lblTitle = new JLabel("Survey Form");
+		lblTitle.setFont(new Font("Arial Black", Font.BOLD, 13));
+		lblTitle.setBounds(375, 10, 100, 25);
+		MainPanel.add(lblTitle);
+		
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				MainPanel.add(btnPrevious);
+				MainPanel.add(btnNext);
+				MainPanel.remove(lblBg);
+				
+				MainPanel.remove(btnStart);
+				
+				MainPanel.repaint();
+				
+				try
+				{		
+						Rdopanel.setLayout(null);
+						Rdopanel.removeAll();
+						frame.repaint();
+						setData(count);
+						count=count+1;
+				}
+				catch(IndexOutOfBoundsException ex) {
+					lblQuestion.setText("You have reached the end of Questions");
+				}
+				catch(Exception ex){
+					
+					System.out.print(ex);
+				}
+				
+			}
+		});
+
+		
 		
 		
 		btnSubmit = new JButton("Submit");
@@ -277,20 +340,21 @@ public class QuestionnaireUI{
 		btnSubmit.setForeground(Color.black);
 		btnSubmit.setBackground(Color.WHITE);
 		btnSubmit.setBounds(0, 0, 150, 50);
-		btnSubmit.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/placeOrderIcon.png")));
+		btnSubmit.setIcon(new ImageIcon(OrderUI.class.getResource("/UI_Images/placeOrderIcon.png")));
 		btnSubmit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
 					QuestionService.sendAnswer(Answers);
+					lblQuestion.setText("Questionnaire Submitted successfully");
+					lblQuestion.setForeground(new Color(30, 130, 76));
+					Rdopanel.remove(btnSubmit);
 				} catch (RemoteException e1) {
 					System.out.println(e1);
 					e1.printStackTrace();
 				}
-				lblQuestion.setText("Questionnaire Submitted successfully");
-				lblQuestion.setForeground(new Color(30, 130, 76));
-				Rdopanel.remove(btnSubmit);
+				
 				
 			}
 		});
@@ -300,8 +364,8 @@ public class QuestionnaireUI{
 	
 	public void setData(int count) {
 		
-		rdoOptions = frame.getContentPane();
-		rdoOptions.add(Rdopanel);
+		//rdoOptions = frame.getContentPane();
+		MainPanel.add(Rdopanel);
 		
 		try {
 			//QuestionDB db = new QuestionDB();

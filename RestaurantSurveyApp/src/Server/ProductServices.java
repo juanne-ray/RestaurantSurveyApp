@@ -28,8 +28,8 @@ public class ProductServices extends UnicastRemoteObject implements ProductInter
 	private final String URL = "jdbc:mysql://localhost:3306/eatzestdb?user=root&password=JSDT1958";
 	private static final long serialVersionUID = 7972831200936360471L;
 	
-	String customerName;
-    String customerId;
+	
+    int customerId;
     List<Product> contents;
 
 	protected ProductServices() throws RemoteException {
@@ -73,9 +73,9 @@ public class ProductServices extends UnicastRemoteObject implements ProductInter
 						int id= rs.getInt("DID");
 						float price = rs.getFloat("Price");
 						String cuisine= rs.getString("Cuisine");
-						//String Image=rs.getString("Image");
+						String image=rs.getString("Image");
 						
-						Product d = new Product(id,name,price,"/Images/pizza.jpg",cuisine);
+						Product d = new Product(id,name,price,image,cuisine);
 						d.setQty(0);
 						DishArray.add(d);
 		            					 
@@ -92,17 +92,26 @@ public class ProductServices extends UnicastRemoteObject implements ProductInter
 	}
 
 	@Override
-	public void initializeCart(String person) throws RemoteException {
-	       if (person == null) {
+	public void initializeCart(int person) throws RemoteException {
+	       if (person == 0) {
 	            throw new RemoteException("Null person not allowed.");
 	        } else {
-	            customerName = person;
+	        	 customerId = person;
+	        	 contents = new ArrayList<Product>();
 	        }
 
-	        customerId = "0";
-	        contents = new ArrayList<Product>();
+	       customerId = person;
+      	   contents = new ArrayList<Product>();
+	       
 		
 	}
+	
+	@Override
+	public int getPerson() throws RemoteException {		
+		return customerId;
+	}
+	
+	
 
 	@Override
 	public void addToCart(Product productDetails) throws RemoteException {
@@ -156,7 +165,7 @@ public class ProductServices extends UnicastRemoteObject implements ProductInter
 		String Query="INSERT INTO `dishes`(`Dish_Name`, `Price`, `Image`, `Cuisine`) VALUES ('"+Name+"',"+Price+",'"+Image+"','"+Cuisine+"')";
 		return ExecutionQuery(Query);
 	}
-	
+
 	
 		
 

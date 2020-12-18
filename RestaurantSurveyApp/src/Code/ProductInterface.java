@@ -7,7 +7,9 @@ public interface ProductInterface extends Remote {
 	
 	public List<Product> getAllDishes() throws RemoteException;
 	
-	public void initializeCart(String person) throws RemoteException;
+	public void initializeCart(int person) throws RemoteException;
+	
+	public int getPerson() throws RemoteException;
     
     public void addToCart(Product productDetails) throws RemoteException;
     

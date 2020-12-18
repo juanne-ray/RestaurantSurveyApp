@@ -20,16 +20,19 @@ import javax.swing.WindowConstants;
 import Code.Customer;
 import Code.CustomerInterface;
 import Code.LoginInterface;
+import Code.SessionCookie;
 
 
 public class RegisterUI {
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
 	private JTextField txtName;
 	private JPasswordField txtConfirmPass;
 	JLabel lblMessage;
+	LoginInterface LoginService;
+	String mySessionCookie;
 
 	/**
 	 * Launch the application.
@@ -75,7 +78,7 @@ public class RegisterUI {
 		JLabel lblLogoImage = new JLabel("");
 		lblLogoImage.setBounds(-50, 0, 1087,460);
 		panel.add(lblLogoImage);	
-		Image img = new ImageIcon(OrderUI.class.getResource("/Images/Logo.png")).getImage();
+		Image img = new ImageIcon(OrderUI.class.getResource("/UI_Images/Logo.png")).getImage();
 		Image newimg = img.getScaledInstance(500, 500,  java.awt.Image.SCALE_SMOOTH);
 		ImageIcon newIcon = new ImageIcon(newimg);
 		
@@ -90,7 +93,7 @@ public class RegisterUI {
 		
 		JButton btnRegister = new JButton("Sign up");
 		btnRegister.setFont(new Font("Arial", Font.PLAIN, 13));
-		btnRegister.setIcon(new ImageIcon(LoginUI.class.getResource("/Images/placeOrderIcon.png")));
+		btnRegister.setIcon(new ImageIcon(LoginUI.class.getResource("/UI_Images/placeOrderIcon.png")));
 		btnRegister.setForeground(Color.BLACK);
 		btnRegister.setBackground(Color.white);
 		btnRegister.setBounds(506, 333, 290, 50);
@@ -143,7 +146,16 @@ public class RegisterUI {
 							CustomerService.CreateNewCustomer(c);					
 							int result= JOptionPane.showConfirmDialog(null, "You Have Suceesfully Registered", "Success",JOptionPane.DEFAULT_OPTION);
 						    
-						    
+							
+
+							
+								LoginService=(LoginInterface) Naming.lookup("rmi://localhost/Login");
+								mySessionCookie = LoginService.login(Email, Password); 
+								SessionCookie.setCookie(mySessionCookie);				
+
+							
+							
+							
 							if (result == 0) { 
 						    	new QuestionnaireUI().frame.setVisible(true);
 						    	frame.dispose();

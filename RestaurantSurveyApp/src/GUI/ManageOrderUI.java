@@ -31,11 +31,14 @@ import javax.swing.table.TableModel;
 
 import Code.Order;
 import Code.OrderInterface;
+import Code.SessionCookie;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ListSelectionModel;
 import javax.swing.ImageIcon;
+import java.awt.SystemColor;
 
 public class ManageOrderUI {
 
@@ -48,6 +51,12 @@ public class ManageOrderUI {
 	JLabel label2;
 	List<Order> ordArray;
 	OrderInterface OrderService;
+	private JPanel controlPanel;
+	private JButton btnChart;
+	private JButton btnOrders;
+	private JButton btnProducts;
+	private JButton btnQuestion;
+	private JLabel lblTitle;
 	
 
 	/**
@@ -85,7 +94,7 @@ public class ManageOrderUI {
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
-		frame.setBounds(250, 100,850,550);
+		frame.setBounds(250, 100,850,500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		index= new String[]{"Order ID", "Customer", "Product","Quantity","Button"};
@@ -158,7 +167,7 @@ public class ManageOrderUI {
 		UIManager.put("OptionPane.messageFont",new Font("Arial", Font.PLAIN, 13));
 		
 		JScrollPane scrollP = new JScrollPane(table1);
-		scrollP.setBounds(40, 10, 500, 400);
+		scrollP.setBounds(100, 50, 500, 350);
 		//scrollP.setBorder(BorderFactory.createEmptyBorder()); //How to remove the border of JScrollPane.
 		scrollP.setBorder(BorderFactory.createLineBorder(Color.lightGray)); 
 		scrollP.setPreferredSize(new Dimension(500, 400));
@@ -213,7 +222,7 @@ public class ManageOrderUI {
 		btnDismiss.setFont(new Font("Arial", Font.PLAIN, 13));
 		btnDismiss.setBackground(Color.WHITE);
 		btnDismiss.setIcon(null);
-		btnDismiss.setBounds(600, 50, 100, 30);
+		btnDismiss.setBounds(650, 50, 100, 30);
 		frame.getContentPane().add(btnDismiss);
 		
 		JButton btnReady = new JButton("Ready");
@@ -243,8 +252,90 @@ public class ManageOrderUI {
 		btnReady.setIcon(null);
 		btnReady.setSelectedIcon(null);
 		btnReady.setBackground(Color.WHITE);
-		btnReady.setBounds(600, 100, 100, 30);
+		btnReady.setBounds(650, 100, 100, 30);
 		frame.getContentPane().add(btnReady);
+		
+		controlPanel = new JPanel();
+		controlPanel.setLayout(null);
+		controlPanel.setPreferredSize(new Dimension(60, 363));
+		controlPanel.setBackground(SystemColor.menu);
+		controlPanel.setBounds(5, 5, 60, 450);
+		frame.getContentPane().add(controlPanel);
+		
+		btnChart = new JButton("");
+		btnChart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ChartsUI ui = new ChartsUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnChart.setIcon(new ImageIcon(ManageOrderUI.class.getResource("/UI_Images/chartIcon.png")));
+		btnChart.setContentAreaFilled(false);
+		btnChart.setBackground(Color.WHITE);
+		btnChart.setBounds(5, 50, 50, 50);
+		controlPanel.add(btnChart);
+		
+		btnOrders = new JButton("");
+		btnOrders.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnOrders.setIcon(new ImageIcon(ManageOrderUI.class.getResource("/UI_Images/iconOrders.png")));
+		btnOrders.setContentAreaFilled(false);
+		btnOrders.setBackground(Color.WHITE);
+		btnOrders.setBounds(5, 125, 50, 50);
+		controlPanel.add(btnOrders);
+		
+		btnProducts = new JButton("");
+		btnProducts.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddProductsUI ui = new AddProductsUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnProducts.setIcon(new ImageIcon(ManageOrderUI.class.getResource("/UI_Images/iconProduct.png")));
+		btnProducts.setContentAreaFilled(false);
+		btnProducts.setBackground(Color.WHITE);
+		btnProducts.setBounds(5, 200, 50, 50);
+		controlPanel.add(btnProducts);
+		
+		btnQuestion = new JButton("");
+		btnQuestion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddQuestionsUI ui = new AddQuestionsUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnQuestion.setIcon(new ImageIcon(ManageOrderUI.class.getResource("/UI_Images/addQuestionIcon.png")));
+		btnQuestion.setContentAreaFilled(false);
+		btnQuestion.setBackground(Color.WHITE);
+		btnQuestion.setBounds(5, 275, 50, 50);
+		controlPanel.add(btnQuestion);
+		
+		
+		JButton btnLogOut = new JButton("");
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SessionCookie.setCookie(null);
+				LoginUI ui = new LoginUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnLogOut.setIcon(new ImageIcon(AddProductsUI.class.getResource("/UI_Images/iconLogOut.png")));
+		btnLogOut.setContentAreaFilled(false);
+		btnLogOut.setBackground(Color.WHITE);
+		btnLogOut.setBounds(5, 350, 50, 50);
+		controlPanel.add(btnLogOut);
+		
+		lblTitle = new JLabel("Manage Orders");
+		lblTitle.setFont(new Font("Arial Black", Font.BOLD, 13));
+		lblTitle.setBounds(375, 10, 120, 25);
+		frame.getContentPane().add(lblTitle);
 
 		//Registering our Jtable for event listening
 		/*table1.getModel().addTableModelListener(new TableModelListener() {

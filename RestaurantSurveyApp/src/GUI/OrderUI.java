@@ -30,15 +30,18 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
+import Code.Customer;
 import Code.OrderInterface;
 import Code.Product;
 import Code.ProductInterface;
-
+import Code.SessionCookie;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -62,6 +65,7 @@ public class OrderUI  {
 	DefaultListModel data;
 	JPanel panelCart;
 	List <Product> cartItems;
+	HttpServletRequest request;
 
 
 	/**
@@ -84,12 +88,23 @@ public class OrderUI  {
 	/**
 	 * Create the application.
 	 */
+	/**
+	 * 
+	 */
 	public OrderUI() {
 		
 		try {
 			ProductService = (ProductInterface) Naming.lookup("rmi://localhost:1099/Product");
 			OrderService = (OrderInterface) Naming.lookup("rmi://localhost:1099/Order");
-			ProductService.initializeCart("Sheena");
+			if(SessionCookie.getCookie()!=null && ProductService.getCartContents()!=null) {
+				
+				data = cartData();
+				list.setModel(data);
+				//if session is closed remove all
+			}
+			else {	
+				ProductService.initializeCart(1);
+			}
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			System.out.println(e);
 			e.printStackTrace();
@@ -111,7 +126,9 @@ public class OrderUI  {
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		
+		UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
+		UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.PLAIN, 12));
+		UIManager.put("Button.background", Color.WHITE);
 		
 		JPanel panel = new JPanel();
 		panel.setForeground(Color.WHITE);
@@ -121,12 +138,13 @@ public class OrderUI  {
 		panel.setLayout(null);
 		
 		JButton btnPreferences = new JButton("");
-		btnPreferences.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/addQuestionIcon.png")));
+		btnPreferences.setIcon(new ImageIcon(OrderUI.class.getResource("/UI_Images/addQuestionIcon.png")));
 		btnPreferences.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				QuestionnaireUI ui = new QuestionnaireUI();
 				ui.frame.setVisible(true);
+				frame.dispose();
 			}
 		});
 		btnPreferences.setContentAreaFilled(false);	
@@ -134,22 +152,50 @@ public class OrderUI  {
 		panel.add(btnPreferences);
 		
 		JButton btnMenu = new JButton("");
-		btnMenu.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/cartIcon.png")));
+		btnMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnMenu.setIcon(new ImageIcon(OrderUI.class.getResource("/UI_Images/cartIcon.png")));
 		btnMenu.setContentAreaFilled(false);	
 		btnMenu.setBounds(5, 175, 50, 50);
 		panel.add(btnMenu);
 		
 		JButton btnFeedback = new JButton("");
-		btnFeedback.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/addQuestionIcon.png")));
+		btnFeedback.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				FeedbackUI ui = new FeedbackUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnFeedback.setIcon(new ImageIcon(OrderUI.class.getResource("/UI_Images/iconFeedback.png")));
 		btnFeedback.setContentAreaFilled(false);	
 		btnFeedback.setBounds(5, 250, 50, 50);
 		panel.add(btnFeedback);
+		
+		JButton btnLogOut = new JButton("");
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				SessionCookie.setCookie(null);
+				LoginUI ui = new LoginUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnLogOut.setIcon(new ImageIcon(OrderUI.class.getResource("/UI_Images/iconLogOut.png")));
+		btnLogOut.setBackground(Color.WHITE);
+		btnLogOut.setBounds(5, 325, 50, 50);
+		btnLogOut.setContentAreaFilled(false);
+		panel.add(btnLogOut);
 		
 		
 		
 		panelCart = new JPanel();
 		panelCart.setBackground(Color.white);
-		panelCart.setBounds(650, 10, 170, 440);
+		panelCart.setBounds(650, 40, 170, 410);
 		frame.getContentPane().add(panelCart);
 		list.setBounds(1, 1, 150, 360);
 		
@@ -174,7 +220,7 @@ public class OrderUI  {
 		 
 		panelCart.add(list);
 		JScrollPane scrollPane_1 = new JScrollPane(list);
-		scrollPane_1.setBounds(9, 5, 152, 362);
+		scrollPane_1.setBounds(9, 10, 152, 310);
 		scrollPane_1.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		panelCart.add(scrollPane_1);
 		
@@ -350,7 +396,7 @@ public class OrderUI  {
 					
 			}
 			
-			scrollPane.setBounds(100, 10, 537, 440);       
+			scrollPane.setBounds(100, 50, 537, 400);       
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		    scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		   /* scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
@@ -402,11 +448,16 @@ public class OrderUI  {
 				}
 			}
 		});
-		btnBuy.setIcon(new ImageIcon(OrderUI.class.getResource("/Images/placeOrderIcon.png")));
+		btnBuy.setIcon(new ImageIcon(OrderUI.class.getResource("/UI_Images/placeOrderIcon.png")));
 		btnBuy.setFont(new Font("Arial", Font.PLAIN, 13));
 		btnBuy.setContentAreaFilled(false);	
-		btnBuy.setBounds(10, 380, 151, 50);
+		btnBuy.setBounds(10, 355, 151, 50);
 		panelCart.add(btnBuy);
+		
+		JLabel lblTitle = new JLabel("Add To Cart");
+		lblTitle.setFont(new Font("Arial Black", Font.BOLD, 13));
+		lblTitle.setBounds(375, 10, 120, 25);
+		frame.getContentPane().add(lblTitle);
 
 
 		
@@ -432,6 +483,4 @@ public class OrderUI  {
 		
 		
 	}
-	
-	
 }

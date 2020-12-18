@@ -14,4 +14,10 @@ public interface LoginInterface extends Remote {
      * @throws RemoteException
      */
     public String logout(String cookie) throws RemoteException; 
+    
+    public String AdminLogin(String username,String password) throws RemoteException;
+    
+    public String Adminlogout(String cookie) throws RemoteException; 
+    
+    
 }

@@ -48,6 +48,7 @@ public class CustomerServices extends UnicastRemoteObject implements CustomerInt
 	public boolean CreateNewCustomer(Customer c) throws RemoteException {
 		String Query="INSERT INTO customer(Name, Email, Password) VALUES('"+c.getName()+
                 "','"+c.getEmail()+"','"+c.getPassword()+"')";
+		
 		return ExecutionQuery(Query);
 	}
 	

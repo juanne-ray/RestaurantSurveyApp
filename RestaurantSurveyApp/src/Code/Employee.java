@@ -1,8 +1,14 @@
 package Code;
 
-public class Employee {
+import java.io.Serializable;
 
-	private int eID;
+public class Employee implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3989635590448006261L;
+	private static int eID;
 	private String Employee;
 	private String Name;
 	private String Email;
@@ -23,8 +29,8 @@ public class Employee {
 		return eID;
 	}
 
-	public void seteID(int eID) {
-		this.eID = eID;
+	public static void seteID(int eid) {
+		eID = eid;
 	}
 
 	public String getEmployee() {

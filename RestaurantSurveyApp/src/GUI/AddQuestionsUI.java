@@ -23,6 +23,7 @@ import javax.swing.event.ListSelectionListener;
 
 import Code.Question;
 import Code.QuestionInterface;
+import Code.SessionCookie;
 
 import java.awt.SystemColor;
 import java.rmi.Naming;
@@ -31,6 +32,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
+import java.awt.Component;
+import javax.swing.JLabel;
 
 
 
@@ -100,8 +103,8 @@ public class AddQuestionsUI {
 		panel = new JPanel();
 		panel.setBackground(Color.white);
 		panel.setBounds(0, 0, 834, 461);
-		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		frame.getContentPane().add(panel);
+		list.setBounds(1, 1, 500, 360);
 		
 		//list = new JList();
 		list.setBorder(null);
@@ -119,10 +122,12 @@ public class AddQuestionsUI {
 		 
 		 data = setData();		
 		 list.setModel(data);
+		 panel.setLayout(null);
 		 
 		 JPanel controlPanel = new JPanel();
+		 controlPanel.setBounds(5, 5, 60, 450);
 		 controlPanel.setPreferredSize(new Dimension(60, 363));
-		 controlPanel.setBackground(Color.WHITE);
+		 controlPanel.setBackground(new Color(240,240,240));
 		 panel.add(controlPanel);
 		 
 		 btnChart = new JButton("");
@@ -130,12 +135,13 @@ public class AddQuestionsUI {
 		 	public void actionPerformed(ActionEvent e) {
 		 		ChartsUI ui = new ChartsUI();
 		 		ui.frame.setVisible(true);
+		 		frame.dispose();
 		 	}
 		 });
 		 controlPanel.setLayout(null);
-		 btnChart.setBounds(0, 0, 60, 60);
+		 btnChart.setBounds(5, 50, 50, 50);
 		 btnChart.setContentAreaFilled(false);
-		 btnChart.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/chartIcon.png")));
+		 btnChart.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/UI_Images/chartIcon.png")));
 		 btnChart.setBackground(Color.WHITE);
 		 controlPanel.add(btnChart);
 		 
@@ -144,12 +150,13 @@ public class AddQuestionsUI {
 		 	public void actionPerformed(ActionEvent e) {
 		 		ManageOrderUI mui = new ManageOrderUI();
 		 		mui.frame.setVisible(true);
+		 		frame.dispose();
 		 	}		 		
 		 });
-		 btnOrders.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/iconOrders.png")));
+		 btnOrders.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/UI_Images/iconOrders.png")));
 		 btnOrders.setContentAreaFilled(false);
 		 btnOrders.setBackground(Color.WHITE);
-		 btnOrders.setBounds(0, 90, 60, 60);
+		 btnOrders.setBounds(5, 125, 50, 50);
 		 controlPanel.add(btnOrders);
 		 
 		 JButton btnProducts = new JButton("");
@@ -158,12 +165,13 @@ public class AddQuestionsUI {
 		 		
 		 		AddProductsUI aui = new AddProductsUI();
 		 		aui.frame.setVisible(true);
+		 		frame.dispose();
 		 	}
 		 });
-		 btnProducts.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/iconProduct.png")));
+		 btnProducts.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/UI_Images/iconProduct.png")));
 		 btnProducts.setContentAreaFilled(false);
 		 btnProducts.setBackground(Color.WHITE);
-		 btnProducts.setBounds(0, 180, 60, 60);
+		 btnProducts.setBounds(5, 200, 50, 50);
 		 controlPanel.add(btnProducts);
 		 
 		 JButton btnQuestion = new JButton("");
@@ -172,11 +180,29 @@ public class AddQuestionsUI {
 		 		
 		 	}
 		 });
-		 btnQuestion.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/addQuestionIcon.png")));
+		 btnQuestion.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/UI_Images/addQuestionIcon.png")));
 		 btnQuestion.setContentAreaFilled(false);
 		 btnQuestion.setBackground(Color.WHITE);
-		 btnQuestion.setBounds(0, 270, 60, 60);
+		 btnQuestion.setBounds(5, 275, 50, 50);
 		 controlPanel.add(btnQuestion);
+		 
+		 JButton btnLogOut = new JButton("");
+			btnLogOut.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					SessionCookie.setCookie(null);
+					LoginUI ui = new LoginUI();
+					ui.frame.setVisible(true);
+					frame.dispose();
+				}
+			});
+			btnLogOut.setIcon(new ImageIcon(AddProductsUI.class.getResource("/UI_Images/iconLogOut.png")));
+			btnLogOut.setContentAreaFilled(false);
+			btnLogOut.setBackground(Color.WHITE);
+			btnLogOut.setBounds(5, 350, 50, 50);
+			controlPanel.add(btnLogOut);
+		 
+			
+			optionlist.setBounds(1, 1, 200, 360);
 		  
 		  
 		 
@@ -214,14 +240,21 @@ public class AddQuestionsUI {
 		
 		  
 		  panel.add(list);
-		  panel.add(new JScrollPane(list));
+		  JScrollPane scrollPane = new JScrollPane(list);
+		  scrollPane.setBounds(70, 40, 502, 325);
+		  panel.add(scrollPane);
 		  panel.add(optionlist);
-		  panel.add(new JScrollPane(optionlist));
+		  JScrollPane scrollPane_1 = new JScrollPane(optionlist);
+		  scrollPane_1.setBounds(577, 40, 202, 325);
+		  panel.add(scrollPane_1);
 		  
-		  panel.add(Box.createRigidArea(new Dimension(200, 50)));
+		  Component rigidArea = Box.createRigidArea(new Dimension(200, 50));
+		  rigidArea.setBounds(5, 373, 200, 50);
+		  panel.add(rigidArea);
 		  
 //------------------------------------------------------Question Buttons -----------------------------------------------
 		  btnNewQuestion = new JButton("");
+		  btnNewQuestion.setBounds(210, 373, 50, 50);
 		  btnNewQuestion.addActionListener(new ActionListener() {
 		  	@Override
 			public void actionPerformed(ActionEvent e) {
@@ -249,7 +282,7 @@ public class AddQuestionsUI {
 			  		
 		  	}
 		  });
-		  btnNewQuestion.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/addQuestionIcon.png")));
+		  btnNewQuestion.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/UI_Images/addQuestionIcon.png")));
 		  btnNewQuestion.setOpaque(false);
 		  btnNewQuestion.setFocusPainted(false);
 		  btnNewQuestion.setBorderPainted(false);
@@ -258,6 +291,7 @@ public class AddQuestionsUI {
 		  panel.add(btnNewQuestion);
 		  
 		  btnDeleteQuestion = new JButton("");
+		  btnDeleteQuestion.setBounds(265, 373, 50, 50);
 		  btnDeleteQuestion.addActionListener(new ActionListener() {
 		  	@Override
 			public void actionPerformed(ActionEvent e) {
@@ -285,7 +319,7 @@ public class AddQuestionsUI {
 		  		}
 		  	}
 		  });
-		  btnDeleteQuestion.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/deleteIcon.png")));
+		  btnDeleteQuestion.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/UI_Images/deleteIcon.png")));
 		  btnDeleteQuestion.setOpaque(false);
 		  btnDeleteQuestion.setFocusPainted(false);
 		  btnDeleteQuestion.setBorderPainted(false);
@@ -294,6 +328,7 @@ public class AddQuestionsUI {
 		  panel.add(btnDeleteQuestion);
 		  
 		  btnUpdateQuestion = new JButton("");
+		  btnUpdateQuestion.setBounds(320, 373, 50, 50);
 		  btnUpdateQuestion.addActionListener(new ActionListener() {
 		  	@Override
 			public void actionPerformed(ActionEvent e) {
@@ -315,7 +350,7 @@ public class AddQuestionsUI {
 		  		}
 		  	}
 		  });
-		  btnUpdateQuestion.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/updateIcon.png")));
+		  btnUpdateQuestion.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/UI_Images/updateIcon.png")));
 		  btnUpdateQuestion.setOpaque(false);
 		  btnUpdateQuestion.setFocusPainted(false);
 		  btnUpdateQuestion.setBorderPainted(false);
@@ -325,11 +360,14 @@ public class AddQuestionsUI {
 		  panel.add(btnUpdateQuestion);
 		  
 		  
-		  panel.add(Box.createRigidArea(new Dimension(200, 50)));
+		  Component rigidArea_1 = Box.createRigidArea(new Dimension(200, 50));
+		  rigidArea_1.setBounds(375, 373, 200, 50);
+		  panel.add(rigidArea_1);
 		  
 //------------------------------Option Buttons ----------------------------------------------------------------		  
 		  btnAddOption = new JButton("");
-		  btnAddOption.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/addIcon.png")));
+		  btnAddOption.setBounds(580, 373, 50, 50);
+		  btnAddOption.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/UI_Images/addIcon.png")));
 		  btnAddOption.setOpaque(false);
 		  btnAddOption.setFocusPainted(false);
 		  btnAddOption.setBorderPainted(false);
@@ -366,7 +404,8 @@ public class AddQuestionsUI {
 		  panel.add(btnAddOption);
 		  
 		  btnDeleteOption = new JButton("");
-		  btnDeleteOption.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/deleteIcon.png")));		  
+		  btnDeleteOption.setBounds(635, 373, 50, 50);
+		  btnDeleteOption.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/UI_Images/deleteIcon.png")));		  
 		  btnDeleteOption.addActionListener(new ActionListener() {
 		  	@Override
 			public void actionPerformed(ActionEvent e) {
@@ -401,7 +440,8 @@ public class AddQuestionsUI {
 		  panel.add(btnDeleteOption);
 		  
 		  btnUpdateOption = new JButton("");
-		  btnUpdateOption.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/Images/updateIcon.png")));
+		  btnUpdateOption.setBounds(690, 373, 50, 50);
+		  btnUpdateOption.setIcon(new ImageIcon(AddQuestionsUI.class.getResource("/UI_Images/updateIcon.png")));
 		  btnUpdateOption.addActionListener(new ActionListener() {
 		  	@Override
 			public void actionPerformed(ActionEvent e) {
@@ -434,7 +474,18 @@ public class AddQuestionsUI {
 		  panel.add(btnUpdateOption);
 		  
 		 // frame.setSize(panel.getPreferredSize());
-		  panel.add(Box.createRigidArea(new Dimension(50, 50)));
+		  Component rigidArea_2 = Box.createRigidArea(new Dimension(50, 50));
+		  rigidArea_2.setBounds(745, 373, 50, 50);
+		  panel.add(rigidArea_2);
+		  
+		  JLabel lblEditQuestions = new JLabel("Edit Questions");
+		  lblEditQuestions.setFont(new Font("Arial Black", Font.BOLD, 13));
+		  lblEditQuestions.setBounds(375, 10, 120, 25);
+		  panel.add(lblEditQuestions);
+		  
+		  UIManager.put("Button.background", Color.white);
+		  UIManager.put("Button.font",new Font("Arial", Font.PLAIN, 13));
+		  UIManager.put("OptionPane.messageFont",new Font("Arial", Font.PLAIN, 13));
 	}
 	
 	//----------------------------------------set Options------------------------------------------------------

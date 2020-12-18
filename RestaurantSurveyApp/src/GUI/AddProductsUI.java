@@ -5,9 +5,12 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -20,6 +23,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -30,6 +34,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -37,6 +42,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.filechooser.FileSystemView;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -46,6 +53,10 @@ import Code.OrderInterface;
 import Code.Product;
 import Code.ProductInterface;
 import Code.Question;
+import Code.SessionCookie;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class AddProductsUI {
 
@@ -69,6 +80,7 @@ public class AddProductsUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
 					AddProductsUI window = new AddProductsUI();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
@@ -103,7 +115,7 @@ public class AddProductsUI {
 		frame.getContentPane().setLayout(null);
 		
 		
-		
+		  
 		
 		index= new String[]{"Product", "Price", "Cuisine","Image"};
 	
@@ -120,6 +132,7 @@ public class AddProductsUI {
 				int column = e.getColumn();
 				int type = e.getType();
 		      
+				
 				//setData();
 				if(row>=dishArray.size()) {
 					int invalid=0;
@@ -142,6 +155,7 @@ public class AddProductsUI {
 							
 							
 							ProductService.insertProduct(name,price,image,cuisine);
+							dishArray=ProductService.getAllDishes();
 						} catch(NumberFormatException e2) {
 							JOptionPane.showMessageDialog(frame, "Please enter a valid price for your item", "Error",JOptionPane.ERROR_MESSAGE);
 							tabModel.setValueAt("0.0",row,1);
@@ -178,6 +192,7 @@ public class AddProductsUI {
 					else if(column==3) {
 						
 						dishArray.get(row).setDescription((String)tabModel.getValueAt(row,column));
+						
 					}
 					
 					Product p = new Product(dishArray.get(row).getdID(), dishArray.get(row).getName(), dishArray.get(row).getPrice(), dishArray.get(row).getDescription(),dishArray.get(row).getCuisine());
@@ -245,6 +260,41 @@ public class AddProductsUI {
 
 		//Initializing a JTable from DefaultTableModel.
 		table1 = new JTable(dTableModel);
+		table1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				Point point = e.getPoint();
+				int column = table1.columnAtPoint(point);
+				int row = table1.rowAtPoint(point);
+				if(column==3) {
+					
+					/*	try {
+							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+						} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+								| UnsupportedLookAndFeelException e1) {
+							System.out.println(e1);
+							e1.printStackTrace();
+						}
+					
+					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+					
+					int returnValue = jfc.showOpenDialog(frame);
+					
+					if (returnValue == JFileChooser.APPROVE_OPTION) {
+					    File selectedFile = jfc.getSelectedFile();
+					    // Display selected file in console
+					    System.out.println(selectedFile.getAbsolutePath());
+					    
+						String escapedPath = selectedFile.getAbsolutePath().replace("\\","/");
+					    dTableModel.setValueAt(escapedPath,row,column);
+					}
+					else {
+					    System.out.println("No File Selected!");
+					}*/
+				}
+			}
+		});
 		table1.setFont(new Font("Arial", Font.PLAIN, 13));
 		table1.getTableHeader().setBackground(new Color(214, 234, 248));
 		table1.getTableHeader().setPreferredSize(new Dimension(500,40));
@@ -256,7 +306,7 @@ public class AddProductsUI {
 		UIManager.put("OptionPane.messageFont",new Font("Arial", Font.PLAIN, 13));
 		
 		JScrollPane scrollP = new JScrollPane(table1);
-		scrollP.setBounds(40, 10, 500, 400);
+		scrollP.setBounds(100, 50, 500, 350);
 		scrollP.getViewport().setBackground(Color.WHITE);
 		
 		//scrollP.setBorder(BorderFactory.createEmptyBorder()); //How to remove the border of JScrollPane.
@@ -349,6 +399,87 @@ public class AddProductsUI {
 		
 		
 		frame.getContentPane().add(scrollP);
+		
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(null);
+		controlPanel.setPreferredSize(new Dimension(60, 363));
+		controlPanel.setBackground(new Color(240,240,240));
+		controlPanel.setBounds(5, 5, 60, 461);
+		frame.getContentPane().add(controlPanel);
+		
+		JButton btnChart = new JButton("");
+		btnChart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ChartsUI ui = new ChartsUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnChart.setIcon(new ImageIcon(AddProductsUI.class.getResource("/UI_Images/chartIcon.png")));
+		btnChart.setContentAreaFilled(false);
+		btnChart.setBackground(Color.WHITE);
+		btnChart.setBounds(5, 50, 50, 50);
+		controlPanel.add(btnChart);
+		
+		JButton btnOrders = new JButton("");
+		btnOrders.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				ManageOrderUI ui = new ManageOrderUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnOrders.setIcon(new ImageIcon(AddProductsUI.class.getResource("/UI_Images/iconOrders.png")));
+		btnOrders.setContentAreaFilled(false);
+		btnOrders.setBackground(Color.WHITE);
+		btnOrders.setBounds(5, 125, 50, 50);
+		controlPanel.add(btnOrders);
+		
+		JButton btnProducts = new JButton("");
+		btnProducts.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnProducts.setIcon(new ImageIcon(AddProductsUI.class.getResource("/UI_Images/iconProduct.png")));
+		btnProducts.setContentAreaFilled(false);
+		btnProducts.setBackground(Color.WHITE);
+		btnProducts.setBounds(5, 200, 50, 50);
+		controlPanel.add(btnProducts);
+		
+		JButton btnQuestion = new JButton("");
+		btnQuestion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddQuestionsUI ui = new AddQuestionsUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnQuestion.setIcon(new ImageIcon(AddProductsUI.class.getResource("/UI_Images/addQuestionIcon.png")));
+		btnQuestion.setContentAreaFilled(false);
+		btnQuestion.setBackground(Color.WHITE);
+		btnQuestion.setBounds(5, 275, 50, 50);
+		controlPanel.add(btnQuestion);
+		
+		JButton btnLogOut = new JButton("");
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SessionCookie.setCookie(null);
+				LoginUI ui = new LoginUI();
+				ui.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnLogOut.setIcon(new ImageIcon(AddProductsUI.class.getResource("/UI_Images/iconLogOut.png")));
+		btnLogOut.setContentAreaFilled(false);
+		btnLogOut.setBackground(Color.WHITE);
+		btnLogOut.setBounds(5, 350, 50, 50);
+		controlPanel.add(btnLogOut);
+		
+		JLabel lblEditProducts = new JLabel("Edit Products");
+		lblEditProducts.setFont(new Font("Arial Black", Font.BOLD, 13));
+		lblEditProducts.setBounds(375, 10, 100, 25);
+		frame.getContentPane().add(lblEditProducts);
 
 	}
 }

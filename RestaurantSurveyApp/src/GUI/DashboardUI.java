@@ -66,7 +66,7 @@ public class DashboardUI {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		panelOrders.setIcon(new ImageIcon(DashboardUI.class.getResource("/Images/iconOrders.png")));
+		panelOrders.setIcon(new ImageIcon(DashboardUI.class.getResource("/UI_Images/iconOrders.png")));
 		//panelOrders.setBorder(new MatteBorder(1, 1, 1, 1, (Color) SystemColor.controlHighlight));
 		panelOrders.setBackground(Color.WHITE);
 		panelOrders.setBounds(100, 100, 150, 100);

@@ -15,8 +15,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 
 public class CustomScrollBarUI extends BasicScrollBarUI {
 
-	//https://stackoverflow.com/a/53662678
-	
+	//Philipp,D (2015) Java JScrollBar Design (Version 1.0) [Source code]. https://stackoverflow.com/a/53662678
 	
 	 private final Dimension d = new Dimension();
 
